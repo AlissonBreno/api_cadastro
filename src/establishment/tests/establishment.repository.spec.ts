@@ -10,6 +10,7 @@ describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let mockData;
   let updateMockData;
+  let idMock;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +21,8 @@ describe('EstablishmentRepository', () => {
     repository.create = jest.fn();
     repository.save = jest.fn();
     repository.update = jest.fn();
+    repository.delete = jest.fn();
+    idMock = 1;
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -35,7 +38,7 @@ describe('EstablishmentRepository', () => {
       status: true,
     } as EstablishmentEntity;
     updateMockData = {
-      id: 1,
+      id: idMock,
       establishment: mockData,
     };
   });
@@ -129,6 +132,38 @@ describe('EstablishmentRepository', () => {
       const result = await repository.updateEstablishments(updateMockData);
 
       expect(result).toEqual(mockData);
+    });
+  });
+
+  describe('deleteEstablishments()', () => {
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+
+      await repository.deleteEstablishments(idMock);
+      expect(repository.findOne).toBeCalledWith(idMock);
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(repository.deleteEstablishments(idMock)).rejects.toThrow(
+        new NotFoundException(`The establishment was not found.`)
+      );
+    });
+
+    it('should be called with corret params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.delete = jest.fn().mockReturnValue({});
+
+      await repository.deleteEstablishments(idMock);
+      expect(repository.delete).toBeCalledWith(idMock);
+    });
+
+    it('should be throw when delete throw', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.delete = jest.fn().mockRejectedValue(new Error());
+
+      await expect(repository.deleteEstablishments(idMock)).rejects.toThrow();
     });
   });
 });

@@ -64,6 +64,16 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async deleteEstablishments(id: number): Promise<void> {
-    return;
+    const establishment = await this.findOne(id);
+
+    if (!establishment) {
+      throw new NotFoundException(`The establishment was not found.`);
+    }
+
+    try {
+      await this.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateEstablishmentsInput } from './types/create-establishments-input.types';
+import { EstablishmentsInput } from './types/create-establishments-input.types';
 
 export class EstablishmentEntity {
   razao_social: string;
@@ -20,7 +20,13 @@ export class EstablishmentRepository {
   }
 
   async createEstablishments(
-    params: CreateEstablishmentsInput
+    params: EstablishmentsInput
+  ): Promise<EstablishmentEntity> {
+    return new EstablishmentEntity();
+  }
+
+  async updateEstablishments(
+    params: EstablishmentsInput
   ): Promise<EstablishmentEntity> {
     return new EstablishmentEntity();
   }
@@ -33,7 +39,11 @@ export class EstablishmentService {
     return await this.establishmentRepository.getEstablishments();
   }
 
-  async createEstablishments(params: CreateEstablishmentsInput) {
+  async createEstablishments(params: EstablishmentsInput) {
     return await this.establishmentRepository.createEstablishments(params);
+  }
+
+  async updateEstablishments(params: EstablishmentsInput) {
+    return await this.establishmentRepository.updateEstablishments(params);
   }
 }

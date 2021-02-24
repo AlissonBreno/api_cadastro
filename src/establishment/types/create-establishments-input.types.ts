@@ -1,4 +1,4 @@
-export type CreateEstablishmentsInput = {
+export type EstablishmentsInput = {
   razao_social: string;
   nome_fantasia: string;
   cnpj: string;

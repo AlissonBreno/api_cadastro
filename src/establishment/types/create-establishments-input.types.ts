@@ -12,3 +12,8 @@ export type EstablishmentsInput = {
   categoria: number;
   status: boolean;
 };
+
+export type updateEstablishmentsInput = {
+  id: number;
+  establishment: EstablishmentsInput;
+};

@@ -1,4 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EstablishmentEntity } from '../establishment.entity';
 import { EstablishmentRepository } from '../establishment.repository';
@@ -6,6 +9,7 @@ import { EstablishmentRepository } from '../establishment.repository';
 describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let mockData;
+  let updateMockData;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,6 +17,9 @@ describe('EstablishmentRepository', () => {
     }).compile();
 
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
+    repository.create = jest.fn();
+    repository.save = jest.fn();
+    repository.update = jest.fn();
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -27,6 +34,10 @@ describe('EstablishmentRepository', () => {
       categoria: 1,
       status: true,
     } as EstablishmentEntity;
+    updateMockData = {
+      id: 1,
+      establishment: mockData,
+    };
   });
 
   it('should be defined', () => {
@@ -44,6 +55,80 @@ describe('EstablishmentRepository', () => {
     it('should be returns when find method return', async () => {
       repository.find = jest.fn().mockReturnValue([mockData]);
       expect(await repository.getEstablishments()).toEqual([mockData]);
+    });
+  });
+
+  describe('createEstablishments()', () => {
+    it('should be called save with correct params', async () => {
+      repository.create = jest.fn().mockReturnValue(mockData);
+      repository.save = jest.fn().mockReturnValue(repository.create);
+
+      await repository.createEstablishments(mockData);
+      expect(repository.save).toBeCalledWith(mockData);
+    });
+
+    it('should be throw if called with invalid params', async () => {
+      mockData.razao_social = null;
+      await expect(repository.createEstablishments(mockData)).rejects.toThrow();
+    });
+
+    it('should be throw when save throw', async () => {
+      repository.save = jest
+        .fn()
+        .mockRejectedValue(new InternalServerErrorException());
+      await expect(repository.createEstablishments(mockData)).rejects.toThrow();
+    });
+
+    it('should be return created data', async () => {
+      expect(await repository.createEstablishments(mockData)).toEqual(mockData);
+    });
+  });
+
+  describe('updateEstablishments()', () => {
+    it('should be throw when update throw', async () => {
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new InternalServerErrorException());
+      await expect(
+        repository.updateEstablishments(updateMockData)
+      ).rejects.toThrow();
+    });
+
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      await repository.updateEstablishments(updateMockData);
+      expect(repository.findOne).toBeCalledWith(updateMockData.id);
+    });
+
+    it('should be throw if called with invalid params', async () => {
+      mockData.razao_social = null;
+      await expect(
+        repository.updateEstablishments(updateMockData)
+      ).rejects.toThrow();
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(
+        repository.updateEstablishments(updateMockData)
+      ).rejects.toThrow(
+        new NotFoundException(`The establishment was not found.`)
+      );
+    });
+
+    it('should be called findOne twice', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      await repository.updateEstablishments(updateMockData);
+      expect(repository.findOne).toBeCalledTimes(2);
+    });
+
+    it('should be return updated data', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.update = jest.fn().mockReturnValue({});
+      const result = await repository.updateEstablishments(updateMockData);
+
+      expect(result).toEqual(mockData);
     });
   });
 });

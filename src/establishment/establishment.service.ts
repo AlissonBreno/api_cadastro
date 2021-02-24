@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { EstablishmentEntity } from './establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
-import { EstablishmentsInput } from './types/create-establishments-input.types';
+import {
+  EstablishmentsInput,
+  updateEstablishmentsInput,
+} from './types/create-establishments-input.types';
 
 @Injectable()
 export class EstablishmentService {
@@ -14,7 +17,7 @@ export class EstablishmentService {
     return await this.establishmentRepository.createEstablishments(params);
   }
 
-  async updateEstablishments(params: EstablishmentsInput) {
+  async updateEstablishments(params: updateEstablishmentsInput) {
     return await this.establishmentRepository.updateEstablishments(params);
   }
 

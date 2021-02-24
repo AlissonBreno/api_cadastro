@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -11,13 +12,15 @@ export class EstablishmentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 200, nullable: false })
+  @Column({ type: 'varchar', length: 200 })
+  @IsNotEmpty()
   razao_social: string;
 
   @Column()
   nome_fantasia: string;
 
-  @Column({ type: 'varchar', length: 14, nullable: false })
+  @Column({ type: 'varchar', length: 14 })
+  @IsNotEmpty()
   cnpj: string;
 
   @Column()

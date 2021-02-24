@@ -9,4 +9,6 @@ export type EstablishmentsInput = {
   estado: string;
   agencia: string;
   conta: string;
+  categoria: number;
+  status: boolean;
 };

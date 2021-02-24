@@ -12,6 +12,8 @@ export class EstablishmentEntity {
   estado: string;
   agencia: string;
   conta: string;
+  categoria: number;
+  status: boolean;
 }
 
 export class EstablishmentRepository {
@@ -30,6 +32,10 @@ export class EstablishmentRepository {
   ): Promise<EstablishmentEntity> {
     return new EstablishmentEntity();
   }
+
+  async deleteEstablishments(id: number): Promise<void> {
+    return;
+  }
 }
 
 @Injectable()
@@ -45,5 +51,9 @@ export class EstablishmentService {
 
   async updateEstablishments(params: EstablishmentsInput) {
     return await this.establishmentRepository.updateEstablishments(params);
+  }
+
+  async deleteEstablishments(id: number) {
+    return await this.establishmentRepository.deleteEstablishments(id);
   }
 }

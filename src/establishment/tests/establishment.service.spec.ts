@@ -10,6 +10,7 @@ describe('EstablishmentService', () => {
   let service: EstablishmentService;
   let repository: EstablishmentRepository;
   let mockData: EstablishmentsInput;
+  let mockId;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,6 +22,7 @@ describe('EstablishmentService', () => {
             getEstablishments: jest.fn(),
             createEstablishments: jest.fn(),
             updateEstablishments: jest.fn(),
+            deleteEstablishments: jest.fn(),
           }),
         },
       ],
@@ -28,6 +30,7 @@ describe('EstablishmentService', () => {
 
     service = module.get<EstablishmentService>(EstablishmentService);
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
+    mockId = 1;
     mockData = {
       razao_social: 'string',
       nome_fantasia: 'string',
@@ -39,6 +42,8 @@ describe('EstablishmentService', () => {
       estado: 'string',
       agencia: 'string',
       conta: 'string',
+      categoria: 1,
+      status: true,
     };
   });
 
@@ -122,6 +127,29 @@ describe('EstablishmentService', () => {
     it('should be return when repository returns', async () => {
       (repository.updateEstablishments as jest.Mock).mockReturnValue({});
       expect(await service.updateEstablishments(mockData)).toEqual({});
+    });
+  });
+
+  describe('deleteEstablishments()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.deleteEstablishments as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException()
+      );
+
+      await expect(service.deleteEstablishments(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be not throw if repository returns', async () => {
+      await expect(service.deleteEstablishments).not.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be called repository with correct params', async () => {
+      await service.deleteEstablishments(mockId);
+      expect(repository.deleteEstablishments).toBeCalledWith(mockId);
     });
   });
 });

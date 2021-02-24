@@ -1,29 +1,29 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  EstablishmentRepository,
-  EstablishmentService,
-} from '../establishment.service';
-import { EstablishmentsInput } from '../types/create-establishments-input.types';
+import { EstablishmentService } from '../establishment.service';
+import { EstablishmentRepository } from '../establishment.repository';
+import { EstablishmentEntity } from '../establishment.entity';
 
 describe('EstablishmentService', () => {
   let service: EstablishmentService;
   let repository: EstablishmentRepository;
-  let mockData: EstablishmentsInput;
+  let mockData;
   let mockId;
 
   beforeEach(async () => {
+    const establishmentRepositoryMock = {
+      getEstablishments: jest.fn(),
+      createEstablishments: jest.fn(),
+      updateEstablishments: jest.fn(),
+      deleteEstablishments: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EstablishmentService,
         {
           provide: EstablishmentRepository,
-          useFactory: () => ({
-            getEstablishments: jest.fn(),
-            createEstablishments: jest.fn(),
-            updateEstablishments: jest.fn(),
-            deleteEstablishments: jest.fn(),
-          }),
+          useFactory: () => establishmentRepositoryMock,
         },
       ],
     }).compile();
@@ -32,19 +32,19 @@ describe('EstablishmentService', () => {
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
     mockId = 1;
     mockData = {
-      razao_social: 'string',
-      nome_fantasia: 'string',
-      cnpj: 'string',
-      email: 'string',
-      telefone: 'string',
-      endereco: 'string',
-      cidade: 'string',
-      estado: 'string',
-      agencia: 'string',
-      conta: 'string',
+      razao_social: 'Tânia Informática ME',
+      nome_fantasia: 'Tânia Informática',
+      cnpj: '04.902.710/0001-68',
+      email: 'compras@suelietaniainformaticame.com.br',
+      telefone: '(11) 2575-8202',
+      endereco: 'Acesso Araponga Martelo',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      agencia: '048-0',
+      conta: '37.586-9',
       categoria: 1,
       status: true,
-    };
+    } as EstablishmentEntity;
   });
 
   it('should be defined', () => {

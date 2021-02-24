@@ -1,14 +1,55 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+@Entity('establishment')
 export class EstablishmentEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar', length: 200, nullable: false })
   razao_social: string;
+
+  @Column()
   nome_fantasia: string;
+
+  @Column({ type: 'varchar', length: 14, nullable: false })
   cnpj: string;
+
+  @Column()
   email: string;
+
+  @Column()
   telefone: string;
+
+  @Column()
   endereco: string;
+
+  @Column()
   cidade: string;
+
+  @Column()
   estado: string;
+
+  @Column()
   agencia: string;
+
+  @Column()
   conta: string;
+
+  @Column()
   categoria: number;
+
+  @Column()
   status: boolean;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  data_cadastro: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updateAt: Date;
 }

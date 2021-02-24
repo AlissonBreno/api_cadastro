@@ -18,6 +18,12 @@ export class EstablishmentRepository {
   async getEstablishments(): Promise<EstablishmentEntity[]> {
     return [new EstablishmentEntity()];
   }
+
+  async createEstablishments(
+    params: CreateEstablishmentsInput
+  ): Promise<EstablishmentEntity> {
+    return new EstablishmentEntity();
+  }
 }
 
 @Injectable()
@@ -25,5 +31,9 @@ export class EstablishmentService {
   constructor(private establishmentRepository: EstablishmentRepository) {}
   async getEstablishments(): Promise<EstablishmentEntity[]> {
     return await this.establishmentRepository.getEstablishments();
+  }
+
+  async createEstablishments(params: CreateEstablishmentsInput) {
+    return await this.establishmentRepository.createEstablishments(params);
   }
 }

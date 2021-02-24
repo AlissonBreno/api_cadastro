@@ -35,7 +35,7 @@ describe('EstablishmentService', () => {
       (repository.getEstablishments as jest.Mock).mockRejectedValue(
         new InternalServerErrorException()
       );
-      await expect(service.getEstablishments).rejects.toThrow(
+      await expect(service.getEstablishments()).rejects.toThrow(
         new InternalServerErrorException()
       );
     });

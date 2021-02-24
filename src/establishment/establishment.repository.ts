@@ -1,9 +1,18 @@
+import { InternalServerErrorException } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './establishment.entity';
 import { EstablishmentsInput } from './types/create-establishments-input.types';
 
-export class EstablishmentRepository {
+@EntityRepository(EstablishmentEntity)
+export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   async getEstablishments(): Promise<EstablishmentEntity[]> {
-    return [new EstablishmentEntity()];
+    const result = await this.find();
+
+    if (!result) {
+      throw new InternalServerErrorException();
+    }
+
+    return result;
   }
 
   async createEstablishments(

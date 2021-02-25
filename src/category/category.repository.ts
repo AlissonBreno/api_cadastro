@@ -1,4 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { CategoryInput } from './dto/category-input.dto';
@@ -34,7 +37,14 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     id: number,
     params: CategoryInput
   ): Promise<CategoryEntity> {
-    return new CategoryEntity();
+    const category = await this.findOne(id);
+
+    if (!category) {
+      throw new NotFoundException(`The category was not found.`);
+    }
+
+    await this.update({ id: id }, params);
+    return await this.findOne(id);
   }
 
   async deleteCategories(id: number): Promise<void> {

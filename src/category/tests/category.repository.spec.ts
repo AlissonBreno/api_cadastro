@@ -1,10 +1,14 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryRepository } from '../category.repository';
 
 describe('EstablishmentRepository', () => {
   let repository: CategoryRepository;
   let mockData;
+  let mockId;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,9 +17,11 @@ describe('EstablishmentRepository', () => {
 
     repository = module.get<CategoryRepository>(CategoryRepository);
     repository.save = jest.fn();
+    repository.update = jest.fn();
     mockData = {
       categoria: 'supermercado',
     };
+    mockId = 1;
   });
 
   it('should be defined', () => {
@@ -56,6 +62,52 @@ describe('EstablishmentRepository', () => {
 
     it('should be return created data', async () => {
       expect(await repository.createCategories(mockData)).toEqual(mockData);
+    });
+  });
+
+  describe('updateCategories()', () => {
+    it('should be throw when update throw', async () => {
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new InternalServerErrorException());
+      await expect(
+        repository.updateCategories(mockId, mockData)
+      ).rejects.toThrow();
+    });
+
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      await repository.updateCategories(mockId, mockData);
+      expect(repository.findOne).toBeCalledWith(mockId);
+    });
+
+    it('should be throw if called with invalid params', async () => {
+      mockData.categoria = null;
+      await expect(
+        repository.updateCategories(mockId, mockData)
+      ).rejects.toThrow();
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(
+        repository.updateCategories(mockId, mockData)
+      ).rejects.toThrow(new NotFoundException(`The category was not found.`));
+    });
+
+    it('should be called findOne twice', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      await repository.updateCategories(mockId, mockData);
+      expect(repository.findOne).toBeCalledTimes(2);
+    });
+
+    it('should be return updated data', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.update = jest.fn().mockReturnValue({});
+      const result = await repository.updateCategories(mockId, mockData);
+
+      expect(result).toEqual(mockData);
     });
   });
 });

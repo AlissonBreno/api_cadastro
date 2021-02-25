@@ -71,13 +71,15 @@ describe('EstablishmentRepository', () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.save = jest.fn().mockReturnValue(mockData);
 
-      await repository.createEstablishments(mockData);
+      await repository.createEstablishments(mockData, mockDataCategory);
       expect(repository.save).toBeCalledWith(mockData);
     });
 
     it('should be throw if called with invalid params', async () => {
       mockData.razao_social = null;
-      await expect(repository.createEstablishments(mockData)).rejects.toThrow();
+      await expect(
+        repository.createEstablishments(mockData, mockDataCategory)
+      ).rejects.toThrow();
     });
 
     it('should be throw when save throw', async () => {
@@ -85,22 +87,16 @@ describe('EstablishmentRepository', () => {
       repository.save = jest
         .fn()
         .mockRejectedValue(new InternalServerErrorException());
-      await expect(repository.createEstablishments(mockData)).rejects.toThrow(
-        new InternalServerErrorException()
-      );
+      await expect(
+        repository.createEstablishments(mockData, mockDataCategory)
+      ).rejects.toThrow(new InternalServerErrorException());
     });
 
     it('should be return created data', async () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
-      expect(await repository.createEstablishments(mockData)).toEqual(mockData);
-    });
-
-    it('should be called categoryRepository findOne one time ', async () => {
-      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
-      repository.findOne = jest.fn().mockReturnValue(mockData);
-
-      await repository.createEstablishments(mockData);
-      expect(categoryRepository.findOne).toBeCalledTimes(1);
+      expect(
+        await repository.createEstablishments(mockData, mockDataCategory)
+      ).toEqual(mockData);
     });
   });
 

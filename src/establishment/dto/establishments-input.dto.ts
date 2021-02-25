@@ -1,4 +1,4 @@
-export type EstablishmentsInput = {
+export class EstablishmentsDto {
   razao_social: string;
   nome_fantasia: string;
   cnpj: string;
@@ -11,9 +11,9 @@ export type EstablishmentsInput = {
   conta: string;
   categoria: number;
   status: boolean;
-};
+}
 
-export type updateEstablishmentsInput = {
+export class updateEstablishmentsDto {
   id: number;
-  establishment: EstablishmentsInput;
-};
+  establishment: EstablishmentsDto;
+}

@@ -6,9 +6,9 @@ import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './establishment.entity';
 import {
-  EstablishmentsInput,
-  updateEstablishmentsInput,
-} from './types/create-establishments-input.types';
+  EstablishmentsDto,
+  updateEstablishmentsDto,
+} from './dto/establishments-input.dto';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -23,7 +23,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async createEstablishments(
-    params: EstablishmentsInput
+    params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
@@ -50,7 +50,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async updateEstablishments(
-    params: updateEstablishmentsInput
+    params: updateEstablishmentsDto
   ): Promise<EstablishmentEntity> {
     const establishment = await this.findOne(params.id);
 

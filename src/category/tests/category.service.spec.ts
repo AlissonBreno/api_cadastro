@@ -13,6 +13,7 @@ describe('CategoryService', () => {
       getCategories: jest.fn(),
       createCategories: jest.fn(),
       updateCategories: jest.fn(),
+      deleteCategories: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -112,6 +113,28 @@ describe('CategoryService', () => {
       expect(await service.updateCategories(mockId, mockData)).toEqual(
         mockData
       );
+    });
+  });
+
+  describe('deleteCategories()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.deleteCategories as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException()
+      );
+      await expect(service.deleteCategories(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be not throw if repository returns', async () => {
+      await expect(service.deleteCategories).not.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be called repository with correct params', async () => {
+      await service.deleteCategories(mockId);
+      expect(repository.deleteCategories).toBeCalledWith(mockId);
     });
   });
 });

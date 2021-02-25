@@ -20,6 +20,10 @@ export class CategoryRepository {
   ): Promise<CategoryEntity> {
     return new CategoryEntity();
   }
+
+  async deleteCategories(id: number): Promise<void> {
+    return;
+  }
 }
 
 @Injectable()
@@ -39,5 +43,9 @@ export class CategoryService {
     params: CategoryInput
   ): Promise<CategoryEntity> {
     return await this.categoryRepository.updateCategories(id, params);
+  }
+
+  async deleteCategories(id: number): Promise<void> {
+    return await this.categoryRepository.deleteCategories(id);
   }
 }

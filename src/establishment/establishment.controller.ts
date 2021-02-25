@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { EstablishmentEntity } from './establishment.entity';
 import { EstablishmentService } from './establishment.service';
-import { EstablishmentsDto } from './dto/establishments-input.dto';
+import {
+  EstablishmentsDto,
+  updateEstablishmentsDto,
+} from './dto/establishments-input.dto';
 
 @Controller('establishment')
 export class EstablishmentController {
@@ -17,5 +27,12 @@ export class EstablishmentController {
     @Body() params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
     return await this.establishmentService.createEstablishments(params);
+  }
+
+  @Patch()
+  async updateEstablishments(
+    @Body() params: updateEstablishmentsDto
+  ): Promise<any> {
+    return await this.establishmentService.updateEstablishments(params);
   }
 }

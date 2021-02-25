@@ -9,8 +9,7 @@ import { EstablishmentRepository } from '../establishment.repository';
 describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let mockData;
-  let updateMockData;
-  let idMock;
+  let mockId;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,7 +21,7 @@ describe('EstablishmentRepository', () => {
     repository.save = jest.fn();
     repository.update = jest.fn();
     repository.delete = jest.fn();
-    idMock = 1;
+    mockId = 1;
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -37,10 +36,6 @@ describe('EstablishmentRepository', () => {
       categoria: 1,
       status: true,
     } as EstablishmentEntity;
-    updateMockData = {
-      id: idMock,
-      establishment: mockData,
-    };
   });
 
   it('should be defined', () => {
@@ -93,20 +88,20 @@ describe('EstablishmentRepository', () => {
         .fn()
         .mockRejectedValue(new InternalServerErrorException());
       await expect(
-        repository.updateEstablishments(updateMockData)
+        repository.updateEstablishments(mockId, mockData)
       ).rejects.toThrow();
     });
 
     it('should be called findOne with correct params', async () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
-      await repository.updateEstablishments(updateMockData);
-      expect(repository.findOne).toBeCalledWith(updateMockData.id);
+      await repository.updateEstablishments(mockId, mockData);
+      expect(repository.findOne).toBeCalledWith(mockId);
     });
 
     it('should be throw if called with invalid params', async () => {
       mockData.razao_social = null;
       await expect(
-        repository.updateEstablishments(updateMockData)
+        repository.updateEstablishments(mockId, mockData)
       ).rejects.toThrow();
     });
 
@@ -114,7 +109,7 @@ describe('EstablishmentRepository', () => {
       repository.findOne = jest.fn().mockReturnValue(undefined);
 
       await expect(
-        repository.updateEstablishments(updateMockData)
+        repository.updateEstablishments(mockId, mockData)
       ).rejects.toThrow(
         new NotFoundException(`The establishment was not found.`)
       );
@@ -122,14 +117,14 @@ describe('EstablishmentRepository', () => {
 
     it('should be called findOne twice', async () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
-      await repository.updateEstablishments(updateMockData);
+      await repository.updateEstablishments(mockId, mockData);
       expect(repository.findOne).toBeCalledTimes(2);
     });
 
     it('should be return updated data', async () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
       repository.update = jest.fn().mockReturnValue({});
-      const result = await repository.updateEstablishments(updateMockData);
+      const result = await repository.updateEstablishments(mockId, mockData);
 
       expect(result).toEqual(mockData);
     });
@@ -139,14 +134,14 @@ describe('EstablishmentRepository', () => {
     it('should be called findOne with correct params', async () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
 
-      await repository.deleteEstablishments(idMock);
-      expect(repository.findOne).toBeCalledWith(idMock);
+      await repository.deleteEstablishments(mockId);
+      expect(repository.findOne).toBeCalledWith(mockId);
     });
 
     it('should be throw if findOne returns empty', async () => {
       repository.findOne = jest.fn().mockReturnValue(undefined);
 
-      await expect(repository.deleteEstablishments(idMock)).rejects.toThrow(
+      await expect(repository.deleteEstablishments(mockId)).rejects.toThrow(
         new NotFoundException(`The establishment was not found.`)
       );
     });
@@ -155,15 +150,15 @@ describe('EstablishmentRepository', () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
       repository.delete = jest.fn().mockReturnValue({});
 
-      await repository.deleteEstablishments(idMock);
-      expect(repository.delete).toBeCalledWith(idMock);
+      await repository.deleteEstablishments(mockId);
+      expect(repository.delete).toBeCalledWith(mockId);
     });
 
     it('should be throw when delete throw', async () => {
       repository.findOne = jest.fn().mockReturnValue(mockData);
       repository.delete = jest.fn().mockRejectedValue(new Error());
 
-      await expect(repository.deleteEstablishments(idMock)).rejects.toThrow();
+      await expect(repository.deleteEstablishments(mockId)).rejects.toThrow();
     });
   });
 });

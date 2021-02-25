@@ -33,11 +33,12 @@ export class EstablishmentController {
     return await this.establishmentService.createEstablishments(params);
   }
 
-  @Patch()
+  @Patch(':id')
   async updateEstablishments(
-    @Body() params: updateEstablishmentsDto
+    @Param('id') id: number,
+    @Body() params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
-    return await this.establishmentService.updateEstablishments(params);
+    return await this.establishmentService.updateEstablishments(id, params);
   }
 
   @Delete('/:id')

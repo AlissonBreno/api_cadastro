@@ -108,14 +108,14 @@ describe('EstablishmentService', () => {
         new InternalServerErrorException()
       );
       mockData.razao_social = 'INVALID';
-      await expect(service.updateEstablishments(mockData)).rejects.toThrow(
-        new InternalServerErrorException()
-      );
+      await expect(
+        service.updateEstablishments(mockId, mockData)
+      ).rejects.toThrow(new InternalServerErrorException());
     });
 
     it('should be called repository with correct params', async () => {
-      await service.updateEstablishments(mockData);
-      expect(repository.updateEstablishments).toBeCalledWith(mockData);
+      await service.updateEstablishments(mockId, mockData);
+      expect(repository.updateEstablishments).toBeCalledWith(mockId, mockData);
     });
 
     it('should be not throw if repository returns', async () => {
@@ -126,7 +126,7 @@ describe('EstablishmentService', () => {
 
     it('should be return when repository returns', async () => {
       (repository.updateEstablishments as jest.Mock).mockReturnValue({});
-      expect(await service.updateEstablishments(mockData)).toEqual({});
+      expect(await service.updateEstablishments(mockId, mockData)).toEqual({});
     });
   });
 

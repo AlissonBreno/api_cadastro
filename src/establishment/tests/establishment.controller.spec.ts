@@ -88,19 +88,21 @@ describe('EstablishmentController', () => {
       (service.updateEstablishments as jest.Mock).mockRejectedValue(
         new BadRequestException()
       );
-      await expect(controller.updateEstablishments(mockData)).rejects.toThrow(
-        new BadRequestException()
-      );
+      await expect(
+        controller.updateEstablishments(mockId, mockData)
+      ).rejects.toThrow(new BadRequestException());
     });
 
     it('should be return with correct params', async () => {
-      await controller.updateEstablishments(mockData);
-      expect(service.updateEstablishments).toBeCalledWith(mockData);
+      await controller.updateEstablishments(mockId, mockData);
+      expect(service.updateEstablishments).toBeCalledWith(mockId, mockData);
     });
 
     it('should be return when service returns', async () => {
       (service.updateEstablishments as jest.Mock).mockReturnValue(mockData);
-      expect(await controller.updateEstablishments(mockData)).toEqual(mockData);
+      expect(await controller.updateEstablishments(mockId, mockData)).toEqual(
+        mockData
+      );
     });
   });
 

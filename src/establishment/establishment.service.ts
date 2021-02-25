@@ -19,8 +19,8 @@ export class EstablishmentService {
     return await this.establishmentRepository.createEstablishments(params);
   }
 
-  async updateEstablishments(params: updateEstablishmentsDto) {
-    return await this.establishmentRepository.updateEstablishments(params);
+  async updateEstablishments(id: number, params: EstablishmentsDto) {
+    return await this.establishmentRepository.updateEstablishments(id, params);
   }
 
   async deleteEstablishments(id: number) {

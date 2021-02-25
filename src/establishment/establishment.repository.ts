@@ -50,17 +50,18 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async updateEstablishments(
-    params: updateEstablishmentsDto
+    id: number,
+    params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
-    const establishment = await this.findOne(params.id);
+    const establishment = await this.findOne(id);
 
     if (!establishment) {
       throw new NotFoundException(`The establishment was not found.`);
     }
 
-    await this.update({ id: params.id }, params.establishment);
+    await this.update({ id: id }, params);
 
-    return await this.findOne(params.id);
+    return await this.findOne(id);
   }
 
   async deleteEstablishments(id: number): Promise<void> {

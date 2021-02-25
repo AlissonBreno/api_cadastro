@@ -16,4 +16,5 @@ export class EstablishmentsDto {
   conta: string;
   categoria: number;
   status: boolean;
+  data_cadastro: Date;
 }

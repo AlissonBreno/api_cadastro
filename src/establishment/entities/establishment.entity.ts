@@ -50,9 +50,12 @@ export class EstablishmentEntity {
   @Column({ type: 'boolean' })
   status: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'date' })
   data_cadastro: Date;
 
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
   @UpdateDateColumn({ type: 'timestamp' })
-  updateAt: Date;
+  updatedAt: Date;
 }

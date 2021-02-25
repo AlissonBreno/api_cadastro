@@ -44,6 +44,7 @@ describe('EstablishmentService', () => {
       conta: '37.586-9',
       categoria: 1,
       status: true,
+      data_cadastro: new Date(),
     } as EstablishmentEntity;
   });
 

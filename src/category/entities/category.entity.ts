@@ -20,8 +20,8 @@ export class CategoryEntity {
   url_icon: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  data_cadastro: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updateAt: Date;
+  updatedAt: Date;
 }

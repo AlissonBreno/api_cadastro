@@ -33,6 +33,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     createEstablishment.estado = params.estado;
     createEstablishment.agencia = params.agencia;
     createEstablishment.conta = params.conta;
+    createEstablishment.data_cadastro = params.data_cadastro;
     createEstablishment.categoria = params.categoria;
     createEstablishment.status = params.status;
 

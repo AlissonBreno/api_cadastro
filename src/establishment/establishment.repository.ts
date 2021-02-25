@@ -16,7 +16,10 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async getEstablishments(): Promise<EstablishmentEntity[]> {
-    const result = await this.find();
+    const result = await this.find({
+      loadEagerRelations: true,
+      relations: ['categoria'],
+    });
 
     if (!result) {
       throw new InternalServerErrorException();

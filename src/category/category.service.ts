@@ -13,6 +13,13 @@ export class CategoryRepository {
   async createCategories(params: CategoryInput): Promise<CategoryEntity> {
     return new CategoryEntity();
   }
+
+  async updateCategories(
+    id: number,
+    params: CategoryInput
+  ): Promise<CategoryEntity> {
+    return new CategoryEntity();
+  }
 }
 
 @Injectable()
@@ -25,5 +32,12 @@ export class CategoryService {
 
   async createCategories(params: CategoryInput): Promise<CategoryEntity> {
     return await this.categoryRepository.createCategories(params);
+  }
+
+  async updateCategories(
+    id: number,
+    params: CategoryInput
+  ): Promise<CategoryEntity> {
+    return await this.categoryRepository.updateCategories(id, params);
   }
 }

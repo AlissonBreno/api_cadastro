@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryRepository } from '../category.repository';
+import { CategoryEntity } from '../entities/category.entity';
 
 describe('EstablishmentRepository', () => {
   let repository: CategoryRepository;
@@ -23,7 +24,7 @@ describe('EstablishmentRepository', () => {
     mockData = {
       categoria: 'supermercado',
       url_icon: 'icon.png',
-    };
+    } as CategoryEntity;
     mockId = 1;
   });
 

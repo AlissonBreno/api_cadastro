@@ -22,6 +22,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
   async createCategories(params: CategoryDto): Promise<CategoryEntity> {
     const createCategories = new CategoryEntity();
     createCategories.categoria = params.categoria;
+    createCategories.url_icon = params.url_icon;
 
     try {
       await validateOrReject(createCategories);

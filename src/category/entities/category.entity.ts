@@ -7,15 +7,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('category')
+@Entity('category', { synchronize: true })
 export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @IsNotEmpty()
+  @Column({ type: 'varchar', length: 150 })
   categoria: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 100 })
   url_icon: string;
 
   @CreateDateColumn({ type: 'timestamp' })

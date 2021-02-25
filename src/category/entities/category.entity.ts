@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,10 +28,10 @@ export class CategoryEntity {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(
+  @OneToMany(
     () => EstablishmentEntity,
-    (establishment) => establishment.categoria
+    (estabelecimento) => estabelecimento.categoria
   )
-  @JoinColumn({ name: 'id_spc_brasil' })
-  establishment: EstablishmentEntity;
+  @JoinColumn({ name: 'id' })
+  estabelecimento: EstablishmentEntity;
 }

@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -47,7 +47,7 @@ export class EstablishmentEntity {
   @Column({ type: 'varchar', length: 6 })
   conta: string;
 
-  @OneToMany(() => CategoryEntity, (categoria) => categoria.establishment)
+  @ManyToOne(() => CategoryEntity, (categoria) => categoria.estabelecimento)
   @JoinColumn({ name: 'id' })
   categoria: CategoryEntity;
 

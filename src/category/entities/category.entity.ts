@@ -1,5 +1,10 @@
 import { IsNotEmpty } from 'class-validator';
-import { PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export class CategoryEntity {
   @PrimaryGeneratedColumn()
@@ -7,4 +12,13 @@ export class CategoryEntity {
 
   @IsNotEmpty()
   categoria: string;
+
+  @Column({ type: 'varchar' })
+  url_icon: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  data_cadastro: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updateAt: Date;
 }

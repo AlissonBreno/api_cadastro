@@ -77,6 +77,11 @@ describe('CategoryService', () => {
       await service.createCategories(mockData);
       expect(repository.createCategories).toBeCalledWith(mockData);
     });
+
+    it('should be return when repository returns', async () => {
+      (repository.createCategories as jest.Mock).mockReturnValue(mockData);
+      expect(await service.createCategories(mockData)).toEqual(mockData);
+    });
   });
 
   describe('updateCategories()', () => {

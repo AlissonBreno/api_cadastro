@@ -7,12 +7,14 @@ describe('EstablishmentController', () => {
   let controller: EstablishmentController;
   let service: EstablishmentService;
   let mockData;
+  let mockId;
 
   beforeEach(async () => {
     const mockService = {
       getEstablishments: jest.fn(),
       createEstablishments: jest.fn(),
       updateEstablishments: jest.fn(),
+      deleteEstablishments: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EstablishmentController],
@@ -23,6 +25,7 @@ describe('EstablishmentController', () => {
 
     controller = module.get<EstablishmentController>(EstablishmentController);
     service = module.get<EstablishmentService>(EstablishmentService);
+    mockId = 1;
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -98,6 +101,22 @@ describe('EstablishmentController', () => {
     it('should be return when service returns', async () => {
       (service.updateEstablishments as jest.Mock).mockReturnValue(mockData);
       expect(await controller.updateEstablishments(mockData)).toEqual(mockData);
+    });
+  });
+
+  describe('deleteEstablishments()', () => {
+    it('should be throw when service throw', async () => {
+      (service.deleteEstablishments as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(controller.deleteEstablishments(mockId)).rejects.toThrow(
+        new BadRequestException()
+      );
+    });
+
+    it('should be called with correct params', async () => {
+      await controller.deleteEstablishments(mockId);
+      expect(service.deleteEstablishments).toBeCalledWith(mockId);
     });
   });
 });

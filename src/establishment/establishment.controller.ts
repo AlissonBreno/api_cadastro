@@ -2,7 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -32,7 +34,12 @@ export class EstablishmentController {
   @Patch()
   async updateEstablishments(
     @Body() params: updateEstablishmentsDto
-  ): Promise<any> {
+  ): Promise<EstablishmentEntity> {
     return await this.establishmentService.updateEstablishments(params);
+  }
+
+  @Delete('/:id')
+  async deleteEstablishments(@Param('id') id: number): Promise<void> {
+    return await this.establishmentService.deleteEstablishments(id);
   }
 }

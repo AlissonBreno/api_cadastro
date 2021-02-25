@@ -14,6 +14,7 @@ describe('CategoryController', () => {
       getCategories: jest.fn(),
       createCategories: jest.fn(),
       updateCategories: jest.fn(),
+      deleteCategories: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -91,6 +92,22 @@ describe('CategoryController', () => {
       expect(await controller.updateCategories(mockId, mockData)).toEqual(
         mockData
       );
+    });
+  });
+
+  describe('deleteCategories()', () => {
+    it('should be throw when service throw', async () => {
+      (service.deleteCategories as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(controller.deleteCategories(mockId)).rejects.toThrow(
+        new BadRequestException()
+      );
+    });
+
+    it('should be called with correct params', async () => {
+      await controller.deleteCategories(mockId);
+      expect(service.deleteCategories).toBeCalledWith(mockId);
     });
   });
 });

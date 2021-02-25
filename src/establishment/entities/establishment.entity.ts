@@ -23,31 +23,31 @@ export class EstablishmentEntity {
   @IsNotEmpty()
   cnpj: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 200 })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20 })
   telefone: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   endereco: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   cidade: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 2 })
   estado: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 4 })
   agencia: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 6 })
   conta: string;
 
-  @Column()
+  @Column({ type: 'int4' })
   categoria: number;
 
-  @Column()
+  @Column({ type: 'boolean' })
   status: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })

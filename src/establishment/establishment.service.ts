@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EstablishmentEntity } from './establishment.entity';
+import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
 import {
   EstablishmentsDto,

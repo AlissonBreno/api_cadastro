@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
-import { EstablishmentEntity } from './establishment.entity';
+import { EstablishmentEntity } from './entities/establishment.entity';
 import {
   EstablishmentsDto,
   updateEstablishmentsDto,

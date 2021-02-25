@@ -3,7 +3,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EstablishmentEntity } from '../establishment.entity';
+import { EstablishmentEntity } from '../entities/establishment.entity';
 import { EstablishmentRepository } from '../establishment.repository';
 
 describe('EstablishmentRepository', () => {

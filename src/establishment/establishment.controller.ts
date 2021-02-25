@@ -8,7 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { EstablishmentEntity } from './establishment.entity';
+import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentService } from './establishment.service';
 import {
   EstablishmentsDto,

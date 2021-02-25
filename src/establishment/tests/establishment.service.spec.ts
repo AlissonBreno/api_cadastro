@@ -2,7 +2,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EstablishmentService } from '../establishment.service';
 import { EstablishmentRepository } from '../establishment.repository';
-import { EstablishmentEntity } from '../establishment.entity';
+import { EstablishmentEntity } from '../entities/establishment.entity';
 
 describe('EstablishmentService', () => {
   let service: EstablishmentService;

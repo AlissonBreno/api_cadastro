@@ -16,8 +16,10 @@ describe('EstablishmentRepository', () => {
     }).compile();
 
     repository = module.get<CategoryRepository>(CategoryRepository);
+    repository.create = jest.fn();
     repository.save = jest.fn();
     repository.update = jest.fn();
+    repository.delete = jest.fn();
     mockData = {
       categoria: 'supermercado',
     };
@@ -108,6 +110,38 @@ describe('EstablishmentRepository', () => {
       const result = await repository.updateCategories(mockId, mockData);
 
       expect(result).toEqual(mockData);
+    });
+  });
+
+  describe('deleteCategories()', () => {
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+
+      await repository.deleteCategories(mockId);
+      expect(repository.findOne).toBeCalledWith(mockId);
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(repository.deleteCategories(mockId)).rejects.toThrow(
+        new NotFoundException(`The category was not found.`)
+      );
+    });
+
+    it('should be called with corret params', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.delete = jest.fn().mockReturnValue({});
+
+      await repository.deleteCategories(mockId);
+      expect(repository.delete).toBeCalledWith(mockId);
+    });
+
+    it('should be throw when delete throw', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.delete = jest.fn().mockRejectedValue(new Error());
+
+      await expect(repository.deleteCategories(mockId)).rejects.toThrow();
     });
   });
 });

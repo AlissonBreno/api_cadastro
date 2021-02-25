@@ -48,6 +48,16 @@ export class CategoryRepository extends Repository<CategoryEntity> {
   }
 
   async deleteCategories(id: number): Promise<void> {
-    return;
+    const category = await this.findOne(id);
+
+    if (!category) {
+      throw new NotFoundException(`The category was not found.`);
+    }
+
+    try {
+      await this.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

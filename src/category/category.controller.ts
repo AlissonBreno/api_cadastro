@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Get, Post } from '@nestjs/common';
+import { Body, Get, Param, Patch, Post } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dto/category-input.dto';
@@ -14,7 +14,15 @@ export class CategoryController {
   }
 
   @Post()
-  async createCategories(@Body() params: CategoryDto): Promise<any> {
+  async createCategories(@Body() params: CategoryDto): Promise<CategoryEntity> {
     return await this.categoryService.createCategories(params);
+  }
+
+  @Patch(':id')
+  async updateCategories(
+    @Param('id') id: number,
+    @Body() params: CategoryDto
+  ): Promise<CategoryEntity> {
+    return await this.categoryService.updateCategories(id, params);
   }
 }

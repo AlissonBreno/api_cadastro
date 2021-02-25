@@ -1,4 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
+import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { CategoryInput } from './dto/category-input.dto';
 import { CategoryEntity } from './entities/category.entity';
@@ -16,7 +17,17 @@ export class CategoryRepository extends Repository<CategoryEntity> {
   }
 
   async createCategories(params: CategoryInput): Promise<CategoryEntity> {
-    return new CategoryEntity();
+    const createCategories = new CategoryEntity();
+    createCategories.categoria = params.categoria;
+
+    try {
+      await validateOrReject(createCategories);
+      await this.save(createCategories);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
+    return createCategories;
   }
 
   async updateCategories(

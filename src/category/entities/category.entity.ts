@@ -1,8 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
+import { EstablishmentEntity } from '../../establishment/entities/establishment.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,4 +27,11 @@ export class CategoryEntity {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @ManyToOne(
+    () => EstablishmentEntity,
+    (establishment) => establishment.categoria
+  )
+  @JoinColumn({ name: 'id_spc_brasil' })
+  establishment: EstablishmentEntity;
 }

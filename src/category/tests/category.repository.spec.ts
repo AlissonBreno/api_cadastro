@@ -3,6 +3,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { EstablishmentEntity } from '../../establishment/entities/establishment.entity';
 import { CategoryRepository } from '../category.repository';
 import { CategoryEntity } from '../entities/category.entity';
 
@@ -13,7 +14,7 @@ describe('EstablishmentRepository', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CategoryRepository],
+      providers: [CategoryRepository, EstablishmentEntity],
     }).compile();
 
     repository = module.get<CategoryRepository>(CategoryRepository);
@@ -144,6 +145,28 @@ describe('EstablishmentRepository', () => {
       repository.delete = jest.fn().mockRejectedValue(new Error());
 
       await expect(repository.deleteCategories(mockId)).rejects.toThrow();
+    });
+  });
+
+  describe('getCategory()', () => {
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue({});
+
+      await repository.getCategory(mockId);
+      expect(repository.findOne).toBeCalledWith(mockId);
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(repository.getCategory(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be return when findOne return', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      expect(await repository.getCategory(mockId)).toEqual(mockData);
     });
   });
 });

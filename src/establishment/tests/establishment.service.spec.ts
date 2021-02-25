@@ -3,10 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EstablishmentService } from '../establishment.service';
 import { EstablishmentRepository } from '../establishment.repository';
 import { EstablishmentEntity } from '../entities/establishment.entity';
+import { CategoryRepository } from '../../category/category.repository';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 
 describe('EstablishmentService', () => {
   let service: EstablishmentService;
   let repository: EstablishmentRepository;
+  let mockDataCategory;
+
   let mockData;
   let mockId;
 
@@ -21,6 +25,7 @@ describe('EstablishmentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EstablishmentService,
+        CategoryRepository,
         {
           provide: EstablishmentRepository,
           useFactory: () => establishmentRepositoryMock,
@@ -31,6 +36,10 @@ describe('EstablishmentService', () => {
     service = module.get<EstablishmentService>(EstablishmentService);
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
     mockId = 1;
+    mockDataCategory = {
+      categoria: 'supermercado',
+      url_icon: 'icon.png',
+    } as CategoryEntity;
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -42,7 +51,7 @@ describe('EstablishmentService', () => {
       estado: 'SP',
       agencia: '048-0',
       conta: '37.586-9',
-      categoria: 1,
+      categoria: mockDataCategory,
       status: true,
       data_cadastro: new Date(),
     } as EstablishmentEntity;

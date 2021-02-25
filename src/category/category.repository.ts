@@ -9,6 +9,16 @@ import { CategoryEntity } from './entities/category.entity';
 
 @EntityRepository(CategoryEntity)
 export class CategoryRepository extends Repository<CategoryEntity> {
+  async getCategory(id: number): Promise<CategoryEntity> {
+    const response = await this.findOne(id);
+
+    if (!response) {
+      throw new InternalServerErrorException();
+    }
+
+    return response;
+  }
+
   async getCategories(): Promise<CategoryEntity[]> {
     const result = await this.find();
 

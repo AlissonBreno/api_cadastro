@@ -1,11 +1,14 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CategoryEntity } from 'src/category/entities/category.entity';
+import { CategoryRepository } from '../../category/category.repository';
 import { EstablishmentController } from '../establishment.controller';
 import { EstablishmentService } from '../establishment.service';
 
 describe('EstablishmentController', () => {
   let controller: EstablishmentController;
   let service: EstablishmentService;
+  let mockDataCategory;
   let mockData;
   let mockId;
 
@@ -17,7 +20,7 @@ describe('EstablishmentController', () => {
       deleteEstablishments: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [EstablishmentController],
+      controllers: [EstablishmentController, CategoryRepository],
       providers: [
         { provide: EstablishmentService, useFactory: () => mockService },
       ],
@@ -26,6 +29,10 @@ describe('EstablishmentController', () => {
     controller = module.get<EstablishmentController>(EstablishmentController);
     service = module.get<EstablishmentService>(EstablishmentService);
     mockId = 1;
+    mockDataCategory = {
+      categoria: 'supermercado',
+      url_icon: 'icon.png',
+    } as CategoryEntity;
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -37,7 +44,7 @@ describe('EstablishmentController', () => {
       estado: 'SP',
       agencia: '048-0',
       conta: '37.586-9',
-      categoria: 1,
+      categoria: mockDataCategory,
       status: true,
     };
   });

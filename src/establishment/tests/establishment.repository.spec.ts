@@ -3,25 +3,34 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CategoryEntity } from 'src/category/entities/category.entity';
+import { CategoryRepository } from '../../category/category.repository';
 import { EstablishmentEntity } from '../entities/establishment.entity';
 import { EstablishmentRepository } from '../establishment.repository';
 
 describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
+  let categoryRepository: CategoryRepository;
+  let mockDataCategory;
   let mockData;
   let mockId;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EstablishmentRepository],
+      providers: [EstablishmentRepository, CategoryRepository],
     }).compile();
 
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
-    repository.create = jest.fn();
+    categoryRepository = module.get<CategoryRepository>(CategoryRepository);
     repository.save = jest.fn();
     repository.update = jest.fn();
     repository.delete = jest.fn();
     mockId = 1;
+    mockDataCategory = {
+      categoria: 'supermercado',
+      url_icon: 'icon.png',
+    } as CategoryEntity;
+
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -33,7 +42,8 @@ describe('EstablishmentRepository', () => {
       estado: 'SP',
       agencia: '048-0',
       conta: '37.586-9',
-      categoria: 1,
+      data_cadastro: new Date(),
+      categoria: mockDataCategory,
       status: true,
     } as EstablishmentEntity;
   });
@@ -58,8 +68,8 @@ describe('EstablishmentRepository', () => {
 
   describe('createEstablishments()', () => {
     it('should be called save with correct params', async () => {
-      repository.create = jest.fn().mockReturnValue(mockData);
-      repository.save = jest.fn().mockReturnValue(repository.create);
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
+      repository.save = jest.fn().mockReturnValue(mockData);
 
       await repository.createEstablishments(mockData);
       expect(repository.save).toBeCalledWith(mockData);
@@ -71,14 +81,26 @@ describe('EstablishmentRepository', () => {
     });
 
     it('should be throw when save throw', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.save = jest
         .fn()
         .mockRejectedValue(new InternalServerErrorException());
-      await expect(repository.createEstablishments(mockData)).rejects.toThrow();
+      await expect(repository.createEstablishments(mockData)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
     });
 
     it('should be return created data', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       expect(await repository.createEstablishments(mockData)).toEqual(mockData);
+    });
+
+    it('should be called categoryRepository findOne one time ', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+
+      await repository.createEstablishments(mockData);
+      expect(categoryRepository.findOne).toBeCalledTimes(1);
     });
   });
 
@@ -93,7 +115,9 @@ describe('EstablishmentRepository', () => {
     });
 
     it('should be called findOne with correct params', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
+
       await repository.updateEstablishments(mockId, mockData);
       expect(repository.findOne).toBeCalledWith(mockId);
     });
@@ -106,6 +130,7 @@ describe('EstablishmentRepository', () => {
     });
 
     it('should be throw if findOne returns empty', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(undefined);
 
       await expect(
@@ -115,15 +140,26 @@ describe('EstablishmentRepository', () => {
       );
     });
 
+    it('should be called categoryRepository findOne one time ', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+
+      await repository.updateEstablishments(mockId, mockData);
+      expect(categoryRepository.findOne).toBeCalledTimes(1);
+    });
+
     it('should be called findOne twice', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
       await repository.updateEstablishments(mockId, mockData);
       expect(repository.findOne).toBeCalledTimes(2);
     });
 
     it('should be return updated data', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
       repository.update = jest.fn().mockReturnValue({});
+
       const result = await repository.updateEstablishments(mockId, mockData);
 
       expect(result).toEqual(mockData);

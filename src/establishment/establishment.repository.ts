@@ -6,9 +6,14 @@ import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
+import { CategoryRepository } from '../category/category.repository';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
+  constructor(private categoryRepository: CategoryRepository) {
+    super();
+  }
+
   async getEstablishments(): Promise<EstablishmentEntity[]> {
     const result = await this.find();
 
@@ -34,7 +39,10 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     createEstablishment.agencia = params.agencia;
     createEstablishment.conta = params.conta;
     createEstablishment.data_cadastro = params.data_cadastro;
-    createEstablishment.categoria = params.categoria;
+    createEstablishment.categoria = await this.categoryRepository.findOne({
+      id: params.categoria,
+    });
+
     createEstablishment.status = params.status;
 
     try {
@@ -53,11 +61,28 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   ): Promise<EstablishmentEntity> {
     const establishment = await this.findOne(id);
 
+    const createEstablishment = new EstablishmentEntity();
+    createEstablishment.razao_social = params.razao_social;
+    createEstablishment.nome_fantasia = params.nome_fantasia;
+    createEstablishment.cnpj = params.cnpj;
+    createEstablishment.email = params.email;
+    createEstablishment.telefone = params.telefone;
+    createEstablishment.endereco = params.endereco;
+    createEstablishment.cidade = params.cidade;
+    createEstablishment.estado = params.estado;
+    createEstablishment.agencia = params.agencia;
+    createEstablishment.conta = params.conta;
+    createEstablishment.data_cadastro = params.data_cadastro;
+    createEstablishment.categoria = await this.categoryRepository.findOne(
+      params.categoria
+    );
+    createEstablishment.status = params.status;
+
     if (!establishment) {
       throw new NotFoundException(`The establishment was not found.`);
     }
 
-    await this.update({ id: id }, params);
+    await this.update({ id: id }, createEstablishment);
 
     return await this.findOne(id);
   }

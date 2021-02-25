@@ -1,8 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
+import { CategoryEntity } from '../../category/entities/category.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -44,8 +47,9 @@ export class EstablishmentEntity {
   @Column({ type: 'varchar', length: 6 })
   conta: string;
 
-  @Column({ type: 'int4' })
-  categoria: number;
+  @OneToMany(() => CategoryEntity, (categoria) => categoria.establishment)
+  @JoinColumn({ name: 'id' })
+  categoria: CategoryEntity;
 
   @Column({ type: 'boolean' })
   status: boolean;

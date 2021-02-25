@@ -11,6 +11,7 @@ describe('CategoryService', () => {
 
   beforeEach(async () => {
     const categoryRepositoryMock = {
+      getCategory: jest.fn(),
       getCategories: jest.fn(),
       createCategories: jest.fn(),
       updateCategories: jest.fn(),
@@ -36,6 +37,31 @@ describe('CategoryService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('getCategory()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.getCategory as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException()
+      );
+      await expect(service.getCategory(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be not throw if repository returns', async () => {
+      await expect(service.getCategory(mockId)).resolves.not.toThrow();
+    });
+
+    it('should be called repository with correct params', async () => {
+      await service.getCategory(mockId);
+      expect(repository.getCategory).toBeCalledWith(mockId);
+    });
+
+    it('should be return when repository return', async () => {
+      (repository.getCategory as jest.Mock).mockReturnValue(mockData);
+      expect(await service.getCategory(mockId)).toEqual(mockData);
+    });
   });
 
   describe('getCategories()', () => {

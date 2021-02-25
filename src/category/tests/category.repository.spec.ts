@@ -22,6 +22,7 @@ describe('EstablishmentRepository', () => {
     repository.delete = jest.fn();
     mockData = {
       categoria: 'supermercado',
+      url_icon: 'icon.png',
     };
     mockId = 1;
   });

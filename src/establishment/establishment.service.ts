@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
-import {
-  EstablishmentsDto,
-  updateEstablishmentsDto,
-} from './dto/establishments-input.dto';
+import { EstablishmentsDto } from './dto/establishments-input.dto';
 
 @Injectable()
 export class EstablishmentService {

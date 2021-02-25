@@ -5,10 +5,7 @@ import {
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './entities/establishment.entity';
-import {
-  EstablishmentsDto,
-  updateEstablishmentsDto,
-} from './dto/establishments-input.dto';
+import { EstablishmentsDto } from './dto/establishments-input.dto';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {

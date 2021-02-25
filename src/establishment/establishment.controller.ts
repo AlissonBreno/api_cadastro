@@ -11,10 +11,7 @@ import {
 } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentService } from './establishment.service';
-import {
-  EstablishmentsDto,
-  updateEstablishmentsDto,
-} from './dto/establishments-input.dto';
+import { EstablishmentsDto } from './dto/establishments-input.dto';
 
 @Controller('establishment')
 export class EstablishmentController {

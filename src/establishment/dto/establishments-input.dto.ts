@@ -17,8 +17,3 @@ export class EstablishmentsDto {
   categoria: number;
   status: boolean;
 }
-
-export class updateEstablishmentsDto {
-  id: number;
-  establishment: EstablishmentsDto;
-}

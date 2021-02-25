@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,7 +12,7 @@ import {
 @Entity('category', { synchronize: true })
 export class CategoryEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id_categoria: number;
 
   @IsNotEmpty()
   @Column({ type: 'varchar', length: 150 })
@@ -32,6 +31,5 @@ export class CategoryEntity {
     () => EstablishmentEntity,
     (estabelecimento) => estabelecimento.categoria
   )
-  @JoinColumn({ name: 'id' })
   estabelecimento: EstablishmentEntity;
 }

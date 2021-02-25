@@ -54,7 +54,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
       throw new NotFoundException(`The category was not found.`);
     }
 
-    await this.update({ id: id }, params);
+    await this.update({ id_categoria: id }, params);
     return await this.findOne(id);
   }
 

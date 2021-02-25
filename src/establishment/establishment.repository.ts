@@ -7,6 +7,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -25,7 +26,8 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async createEstablishments(
-    params: EstablishmentsDto
+    params: EstablishmentsDto,
+    category: CategoryEntity
   ): Promise<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
@@ -39,9 +41,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     createEstablishment.agencia = params.agencia;
     createEstablishment.conta = params.conta;
     createEstablishment.data_cadastro = params.data_cadastro;
-    createEstablishment.categoria = await this.categoryRepository.findOne({
-      id: params.categoria,
-    });
+    createEstablishment.categoria = category;
 
     createEstablishment.status = params.status;
 
@@ -82,7 +82,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
       throw new NotFoundException(`The establishment was not found.`);
     }
 
-    await this.update({ id: id }, createEstablishment);
+    await this.update({ id_estabelecimento: id }, createEstablishment);
 
     return await this.findOne(id);
   }

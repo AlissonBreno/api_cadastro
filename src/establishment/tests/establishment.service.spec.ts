@@ -3,14 +3,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EstablishmentService } from '../establishment.service';
 import { EstablishmentRepository } from '../establishment.repository';
 import { EstablishmentEntity } from '../entities/establishment.entity';
-import { CategoryRepository } from '../../category/category.repository';
-import { CategoryEntity } from 'src/category/entities/category.entity';
+import { CategoryEntity } from '../../category/entities/category.entity';
+import { CategoryService } from '../../category/category.service';
 
 describe('EstablishmentService', () => {
   let service: EstablishmentService;
   let repository: EstablishmentRepository;
-  let mockDataCategory;
+  let serviceCategory: CategoryService;
 
+  let mockDataCategory;
   let mockData;
   let mockId;
 
@@ -25,7 +26,10 @@ describe('EstablishmentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EstablishmentService,
-        CategoryRepository,
+        {
+          provide: CategoryService,
+          useFactory: () => ({ getCategory: jest.fn() }),
+        },
         {
           provide: EstablishmentRepository,
           useFactory: () => establishmentRepositoryMock,
@@ -35,10 +39,12 @@ describe('EstablishmentService', () => {
 
     service = module.get<EstablishmentService>(EstablishmentService);
     repository = module.get<EstablishmentRepository>(EstablishmentRepository);
+    serviceCategory = module.get<CategoryService>(CategoryService);
     mockId = 1;
     mockDataCategory = {
+      id_categoria: 1,
       categoria: 'supermercado',
-      url_icon: 'icon.png',
+      url_icon: 'icone.png',
     } as CategoryEntity;
     mockData = {
       razao_social: 'Tânia Informática ME',
@@ -85,6 +91,9 @@ describe('EstablishmentService', () => {
 
   describe('createEstablishments()', () => {
     it('should be throw if repository throw', async () => {
+      (serviceCategory.getCategory as jest.Mock).mockReturnValue(
+        mockDataCategory
+      );
       (repository.createEstablishments as jest.Mock).mockRejectedValue(
         new InternalServerErrorException()
       );
@@ -102,8 +111,15 @@ describe('EstablishmentService', () => {
     });
 
     it('should be called repository with correct params', async () => {
+      (serviceCategory.getCategory as jest.Mock).mockReturnValue(
+        mockDataCategory
+      );
+
       await service.createEstablishments(mockData);
-      expect(repository.createEstablishments).toBeCalledWith(mockData);
+      expect(repository.createEstablishments).toBeCalledWith(
+        mockData,
+        mockDataCategory
+      );
     });
 
     it('should be return when repository returns', async () => {

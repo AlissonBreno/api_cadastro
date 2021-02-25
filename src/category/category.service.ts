@@ -7,6 +7,10 @@ import { CategoryEntity } from './entities/category.entity';
 export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
+  async getCategory(id: number): Promise<CategoryEntity> {
+    return await this.categoryRepository.getCategory(id);
+  }
+
   async getCategories(): Promise<CategoryEntity[]> {
     return await this.categoryRepository.getCategories();
   }

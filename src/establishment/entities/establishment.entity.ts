@@ -13,7 +13,7 @@ import {
 @Entity('establishment')
 export class EstablishmentEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id_estabelecimento: number;
 
   @Column({ type: 'varchar', length: 200 })
   @IsNotEmpty()
@@ -48,7 +48,7 @@ export class EstablishmentEntity {
   conta: string;
 
   @ManyToOne(() => CategoryEntity, (categoria) => categoria.estabelecimento)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'id_categoria' })
   categoria: CategoryEntity;
 
   @Column({ type: 'boolean' })

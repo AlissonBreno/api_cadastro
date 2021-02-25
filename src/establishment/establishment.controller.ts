@@ -11,4 +11,11 @@ export class EstablishmentController {
   async getEstablishments(): Promise<EstablishmentEntity[]> {
     return await this.establishmentService.getEstablishments();
   }
+
+  @Post()
+  async createEstablishments(
+    @Body() params: EstablishmentsDto
+  ): Promise<EstablishmentEntity> {
+    return await this.establishmentService.createEstablishments(params);
+  }
 }

@@ -57,4 +57,25 @@ describe('EstablishmentController', () => {
       expect(await controller.getEstablishments()).toEqual([mockData]);
     });
   });
+
+  describe('createEstablishments()', () => {
+    it('should be throw when service throw', async () => {
+      (service.createEstablishments as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(controller.createEstablishments(mockData)).rejects.toThrow(
+        new BadRequestException()
+      );
+    });
+
+    it('should be return with correct params', async () => {
+      await controller.createEstablishments(mockData);
+      expect(service.createEstablishments).toBeCalledWith(mockData);
+    });
+
+    it('should be return when service returns', async () => {
+      (service.createEstablishments as jest.Mock).mockReturnValue(mockData);
+      expect(await controller.createEstablishments(mockData)).toEqual(mockData);
+    });
+  });
 });

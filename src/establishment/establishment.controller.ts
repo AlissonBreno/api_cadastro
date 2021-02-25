@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentService } from './establishment.service';
@@ -24,6 +26,7 @@ export class EstablishmentController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   async createEstablishments(
     @Body() params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {

@@ -1,30 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { CategoryRepository } from './category.repository';
 import { CategoryInput } from './dto/category-input.dto';
-
-export class CategoryEntity {
-  categoria: string;
-}
-
-export class CategoryRepository {
-  async getCategories(): Promise<CategoryEntity[]> {
-    return [new CategoryEntity()];
-  }
-
-  async createCategories(params: CategoryInput): Promise<CategoryEntity> {
-    return new CategoryEntity();
-  }
-
-  async updateCategories(
-    id: number,
-    params: CategoryInput
-  ): Promise<CategoryEntity> {
-    return new CategoryEntity();
-  }
-
-  async deleteCategories(id: number): Promise<void> {
-    return;
-  }
-}
+import { CategoryEntity } from './entities/category.entity';
 
 @Injectable()
 export class CategoryService {

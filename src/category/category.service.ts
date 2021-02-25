@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryRepository } from './category.repository';
-import { CategoryInput } from './dto/category-input.dto';
+import { CategoryDto } from './dto/category-input.dto';
 import { CategoryEntity } from './entities/category.entity';
 
 @Injectable()
@@ -11,13 +11,13 @@ export class CategoryService {
     return await this.categoryRepository.getCategories();
   }
 
-  async createCategories(params: CategoryInput): Promise<CategoryEntity> {
+  async createCategories(params: CategoryDto): Promise<CategoryEntity> {
     return await this.categoryRepository.createCategories(params);
   }
 
   async updateCategories(
     id: number,
-    params: CategoryInput
+    params: CategoryDto
   ): Promise<CategoryEntity> {
     return await this.categoryRepository.updateCategories(id, params);
   }

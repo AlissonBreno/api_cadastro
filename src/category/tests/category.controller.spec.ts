@@ -11,6 +11,7 @@ describe('CategoryController', () => {
   beforeEach(async () => {
     const mockService = {
       getCategories: jest.fn(),
+      createCategories: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -43,6 +44,27 @@ describe('CategoryController', () => {
     it('should be return when service returns', async () => {
       (service.getCategories as jest.Mock).mockReturnValue([mockData]);
       expect(await controller.getCategories()).toEqual([mockData]);
+    });
+  });
+
+  describe('createCategories()', () => {
+    it('should be throw when service throw', async () => {
+      (service.createCategories as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(controller.createCategories(mockData)).rejects.toThrow(
+        new BadRequestException()
+      );
+    });
+
+    it('should be return with correct params', async () => {
+      await controller.createCategories(mockData);
+      expect(service.createCategories).toBeCalledWith(mockData);
+    });
+
+    it('should be return when service returns', async () => {
+      (service.createCategories as jest.Mock).mockReturnValue(mockData);
+      expect(await controller.createCategories(mockData)).toEqual(mockData);
     });
   });
 });

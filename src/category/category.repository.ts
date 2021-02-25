@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
-import { CategoryInput } from './dto/category-input.dto';
+import { CategoryDto } from './dto/category-input.dto';
 import { CategoryEntity } from './entities/category.entity';
 
 @EntityRepository(CategoryEntity)
@@ -19,7 +19,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     return result;
   }
 
-  async createCategories(params: CategoryInput): Promise<CategoryEntity> {
+  async createCategories(params: CategoryDto): Promise<CategoryEntity> {
     const createCategories = new CategoryEntity();
     createCategories.categoria = params.categoria;
 
@@ -35,7 +35,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
 
   async updateCategories(
     id: number,
-    params: CategoryInput
+    params: CategoryDto
   ): Promise<CategoryEntity> {
     const category = await this.findOne(id);
 

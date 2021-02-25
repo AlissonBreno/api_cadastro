@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CategoryInput {
+export class CategoryDto {
   @IsNotEmpty()
   categoria: string;
 

@@ -31,6 +31,7 @@ export class EstablishmentController {
   }
 
   @Patch(':id')
+  @UsePipes(ValidationPipe)
   async updateEstablishments(
     @Param('id') id: number,
     @Body() params: EstablishmentsDto

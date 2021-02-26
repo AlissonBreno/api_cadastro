@@ -7,7 +7,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
-import { CategoryEntity } from 'src/category/entities/category.entity';
+import { CategoryEntity } from '../category/entities/category.entity';
+import { addMask, removeMask } from '../shared/helpers/cnpj.helper';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -25,6 +26,10 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
       throw new InternalServerErrorException();
     }
 
+    result.forEach((item) => {
+      item.cnpj = addMask(item.cnpj);
+    });
+
     return result;
   }
 
@@ -35,7 +40,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
     createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = params.cnpj;
+    createEstablishment.cnpj = removeMask(params.cnpj);
     createEstablishment.email = params.email;
     createEstablishment.telefone = params.telefone;
     createEstablishment.endereco = params.endereco;
@@ -55,6 +60,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
       throw new InternalServerErrorException();
     }
 
+    createEstablishment.cnpj = params.cnpj;
     return createEstablishment;
   }
 
@@ -68,7 +74,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
     createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = params.cnpj;
+    createEstablishment.cnpj = removeMask(params.cnpj);
     createEstablishment.email = params.email;
     createEstablishment.telefone = params.telefone;
     createEstablishment.endereco = params.endereco;
@@ -86,11 +92,15 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
 
     await this.update({ id_estabelecimento: id }, createEstablishment);
 
-    return await this.findOne({
+    const response = await this.findOne({
       where: { id_estabelecimento: id },
       loadEagerRelations: true,
       relations: ['categoria'],
     });
+
+    response.cnpj = addMask(response.cnpj);
+
+    return response;
   }
 
   async deleteEstablishments(id: number): Promise<void> {

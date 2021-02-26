@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryService } from '../category/category.service';
+import { validateCnpj } from '../shared/helpers/cnpj.helper';
 
 @Injectable()
 export class EstablishmentService {
@@ -17,6 +18,12 @@ export class EstablishmentService {
   async createEstablishments(
     params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
+    const { cnpj } = params;
+
+    if (!validateCnpj(cnpj)) {
+      throw new BadRequestException('cnpj must be valid.');
+    }
+
     const category = await this.categoryService.getCategory(params.categoria);
     return await this.establishmentRepository.createEstablishments(
       params,
@@ -25,6 +32,12 @@ export class EstablishmentService {
   }
 
   async updateEstablishments(id: number, params: EstablishmentsDto) {
+    const { cnpj } = params;
+
+    if (!validateCnpj(cnpj)) {
+      throw new BadRequestException('cnpj must be valid.');
+    }
+
     const category = await this.categoryService.getCategory(params.categoria);
     return await this.establishmentRepository.updateEstablishments(
       id,

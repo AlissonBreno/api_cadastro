@@ -1,4 +1,4 @@
-export function validate(cnpj: string): boolean {
+export function validateCnpj(cnpj: string): boolean {
   const cnpjFormated = removeMask(cnpj);
 
   if (cnpjFormated.length == 14) {

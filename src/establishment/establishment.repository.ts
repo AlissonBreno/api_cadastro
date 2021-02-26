@@ -8,7 +8,11 @@ import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
 import { CategoryEntity } from '../category/entities/category.entity';
-import { addMaskCnpj, removeMaskCnpj } from '../shared/helpers/cnpj.helper';
+import { addMaskCnpj } from '../shared/helpers/cnpj.helper';
+import { addMaskAgencia } from 'src/shared/helpers/agencia.helper';
+import { removeMask } from 'src/shared/helpers/string.helper';
+import { addMaskConta } from 'src/shared/helpers/conta.helper';
+import { addMaskTelefone } from 'src/shared/helpers/telefone.helper';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -28,6 +32,8 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
 
     result.forEach((item) => {
       item.cnpj = addMaskCnpj(item.cnpj);
+      item.agencia = addMaskAgencia(item.agencia);
+      item.conta = addMaskConta(item.conta);
     });
 
     return result;
@@ -40,14 +46,14 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
     createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = removeMaskCnpj(params.cnpj);
+    createEstablishment.cnpj = removeMask(params.cnpj);
     createEstablishment.email = params.email;
-    createEstablishment.telefone = params.telefone;
+    createEstablishment.telefone = removeMask(params.telefone);
     createEstablishment.endereco = params.endereco;
     createEstablishment.cidade = params.cidade;
     createEstablishment.estado = params.estado;
-    createEstablishment.agencia = params.agencia;
-    createEstablishment.conta = params.conta;
+    createEstablishment.agencia = removeMask(params.agencia);
+    createEstablishment.conta = removeMask(params.conta);
     createEstablishment.data_cadastro = params.data_cadastro;
     createEstablishment.categoria = category;
 
@@ -61,6 +67,9 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     }
 
     createEstablishment.cnpj = params.cnpj;
+    createEstablishment.telefone = addMaskTelefone(params.telefone);
+    createEstablishment.agencia = addMaskAgencia(params.agencia);
+    createEstablishment.conta = addMaskConta(params.conta);
     return createEstablishment;
   }
 
@@ -71,26 +80,28 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   ): Promise<EstablishmentEntity> {
     const establishment = await this.findOne(id);
 
-    const createEstablishment = new EstablishmentEntity();
-    createEstablishment.razao_social = params.razao_social;
-    createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = removeMaskCnpj(params.cnpj);
-    createEstablishment.email = params.email;
-    createEstablishment.telefone = params.telefone;
-    createEstablishment.endereco = params.endereco;
-    createEstablishment.cidade = params.cidade;
-    createEstablishment.estado = params.estado;
-    createEstablishment.agencia = params.agencia;
-    createEstablishment.conta = params.conta;
-    createEstablishment.data_cadastro = params.data_cadastro;
-    createEstablishment.categoria = category;
-    createEstablishment.status = params.status;
+    console.log(removeMask(params.cnpj));
+
+    const updateFormated = new EstablishmentEntity();
+    updateFormated.razao_social = params.razao_social;
+    updateFormated.nome_fantasia = params.nome_fantasia;
+    updateFormated.cnpj = removeMask(params.cnpj);
+    updateFormated.email = params.email;
+    updateFormated.telefone = removeMask(params.telefone);
+    updateFormated.endereco = params.endereco;
+    updateFormated.cidade = params.cidade;
+    updateFormated.estado = params.estado;
+    updateFormated.agencia = removeMask(params.agencia);
+    updateFormated.conta = removeMask(params.conta);
+    updateFormated.data_cadastro = params.data_cadastro;
+    updateFormated.categoria = category;
+    updateFormated.status = params.status;
 
     if (!establishment) {
       throw new NotFoundException(`The establishment was not found.`);
     }
 
-    await this.update({ id_estabelecimento: id }, createEstablishment);
+    await this.update({ id_estabelecimento: id }, updateFormated);
 
     const response = await this.findOne({
       where: { id_estabelecimento: id },
@@ -99,6 +110,9 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     });
 
     response.cnpj = addMaskCnpj(response.cnpj);
+    response.telefone = addMaskTelefone(params.telefone);
+    response.agencia = addMaskAgencia(response.agencia);
+    response.conta = addMaskConta(response.conta);
 
     return response;
   }

@@ -1,5 +1,7 @@
+import { removeMask } from './string.helper';
+
 export function validateCnpj(cnpj: string): boolean {
-  const cnpjFormated = removeMaskCnpj(cnpj);
+  const cnpjFormated = removeMask(cnpj);
 
   if (cnpjFormated.length == 14) {
     const cnpj: any = cnpjFormated.split('');
@@ -72,8 +74,4 @@ export function addMaskCnpj(cnpj: string): string {
     );
   }
   return cnpj;
-}
-
-export function removeMaskCnpj(cnpj: string): string {
-  return cnpj.replace(/[.]/g, '').replace(/[-]/g, '').replace(/[/]/g, '');
 }

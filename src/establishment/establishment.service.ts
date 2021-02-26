@@ -25,7 +25,12 @@ export class EstablishmentService {
   }
 
   async updateEstablishments(id: number, params: EstablishmentsDto) {
-    return await this.establishmentRepository.updateEstablishments(id, params);
+    const category = await this.categoryService.getCategory(params.categoria);
+    return await this.establishmentRepository.updateEstablishments(
+      id,
+      params,
+      category
+    );
   }
 
   async deleteEstablishments(id: number) {

@@ -60,7 +60,8 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
 
   async updateEstablishments(
     id: number,
-    params: EstablishmentsDto
+    params: EstablishmentsDto,
+    category: CategoryEntity
   ): Promise<EstablishmentEntity> {
     const establishment = await this.findOne(id);
 
@@ -76,9 +77,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     createEstablishment.agencia = params.agencia;
     createEstablishment.conta = params.conta;
     createEstablishment.data_cadastro = params.data_cadastro;
-    createEstablishment.categoria = await this.categoryRepository.findOne(
-      params.categoria
-    );
+    createEstablishment.categoria = category;
     createEstablishment.status = params.status;
 
     if (!establishment) {
@@ -87,7 +86,11 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
 
     await this.update({ id_estabelecimento: id }, createEstablishment);
 
-    return await this.findOne(id);
+    return await this.findOne({
+      where: { id_estabelecimento: id },
+      loadEagerRelations: true,
+      relations: ['categoria'],
+    });
   }
 
   async deleteEstablishments(id: number): Promise<void> {

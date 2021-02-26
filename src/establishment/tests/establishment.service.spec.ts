@@ -46,6 +46,7 @@ describe('EstablishmentService', () => {
       categoria: 'supermercado',
       url_icon: 'icone.png',
     } as CategoryEntity;
+
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -140,8 +141,16 @@ describe('EstablishmentService', () => {
     });
 
     it('should be called repository with correct params', async () => {
+      (serviceCategory.getCategory as jest.Mock).mockReturnValue(
+        mockDataCategory
+      );
+
       await service.updateEstablishments(mockId, mockData);
-      expect(repository.updateEstablishments).toBeCalledWith(mockId, mockData);
+      expect(repository.updateEstablishments).toBeCalledWith(
+        mockId,
+        mockData,
+        mockDataCategory
+      );
     });
 
     it('should be not throw if repository returns', async () => {

@@ -66,17 +66,10 @@ export function validate(cnpj: string): boolean {
 
 export function addMask(cnpj: string): string {
   if (cnpj.length <= 14) {
-    //Insert dot between the second and third digits
-    cnpj = cnpj.replace(/^(\d{2})(\d)/, '$1.$2');
-
-    //Insert fot between fifth and sixth digits
-    cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, '$1 $2 $3');
-
-    //Insert a bar between eighth and ninth digits
-    cnpj = cnpj.replace(/\.(\d{3})(\d)/, '.$1/$2');
-
-    //Insert a hyphen after the block of four digits
-    cnpj = cnpj.replace(/(\d{4})(\d)/, '$1-$2');
+    cnpj = cnpj.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+      '$1.$2.$3/$4-$5'
+    );
   }
   return cnpj;
 }

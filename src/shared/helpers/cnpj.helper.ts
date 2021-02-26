@@ -1,5 +1,5 @@
 export function validateCnpj(cnpj: string): boolean {
-  const cnpjFormated = removeMask(cnpj);
+  const cnpjFormated = removeMaskCnpj(cnpj);
 
   if (cnpjFormated.length == 14) {
     const cnpj: any = cnpjFormated.split('');
@@ -64,7 +64,7 @@ export function validateCnpj(cnpj: string): boolean {
   }
 }
 
-export function addMask(cnpj: string): string {
+export function addMaskCnpj(cnpj: string): string {
   if (cnpj.length <= 14) {
     cnpj = cnpj.replace(
       /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
@@ -74,6 +74,6 @@ export function addMask(cnpj: string): string {
   return cnpj;
 }
 
-export function removeMask(cnpj: string): string {
+export function removeMaskCnpj(cnpj: string): string {
   return cnpj.replace(/[.]/g, '').replace(/[-]/g, '').replace(/[/]/g, '');
 }

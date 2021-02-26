@@ -8,7 +8,7 @@ import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
 import { CategoryEntity } from '../category/entities/category.entity';
-import { addMask, removeMask } from '../shared/helpers/cnpj.helper';
+import { addMaskCnpj, removeMaskCnpj } from '../shared/helpers/cnpj.helper';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -27,7 +27,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     }
 
     result.forEach((item) => {
-      item.cnpj = addMask(item.cnpj);
+      item.cnpj = addMaskCnpj(item.cnpj);
     });
 
     return result;
@@ -40,7 +40,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
     createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = removeMask(params.cnpj);
+    createEstablishment.cnpj = removeMaskCnpj(params.cnpj);
     createEstablishment.email = params.email;
     createEstablishment.telefone = params.telefone;
     createEstablishment.endereco = params.endereco;
@@ -74,7 +74,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     const createEstablishment = new EstablishmentEntity();
     createEstablishment.razao_social = params.razao_social;
     createEstablishment.nome_fantasia = params.nome_fantasia;
-    createEstablishment.cnpj = removeMask(params.cnpj);
+    createEstablishment.cnpj = removeMaskCnpj(params.cnpj);
     createEstablishment.email = params.email;
     createEstablishment.telefone = params.telefone;
     createEstablishment.endereco = params.endereco;
@@ -98,7 +98,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
       relations: ['categoria'],
     });
 
-    response.cnpj = addMask(response.cnpj);
+    response.cnpj = addMaskCnpj(response.cnpj);
 
     return response;
   }

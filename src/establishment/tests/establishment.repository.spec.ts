@@ -12,6 +12,7 @@ describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let categoryRepository: CategoryRepository;
   let mockDataCategory;
+  let mockDataParams;
   let mockData;
   let mockId;
 
@@ -42,10 +43,26 @@ describe('EstablishmentRepository', () => {
       estado: 'SP',
       agencia: '048-0',
       conta: '37.586-9',
-      data_cadastro: new Date(),
+      data_cadastro: new Date('2021-02-13T03:00:00.000Z'),
       categoria: mockDataCategory,
       status: true,
     } as EstablishmentEntity;
+
+    mockDataParams = {
+      razao_social: 'Tânia Informática ME',
+      nome_fantasia: 'Tânia Informática',
+      cnpj: '04.902.710/0001-68',
+      email: 'compras@suelietaniainformaticame.com.br',
+      telefone: '(11) 2575-8202',
+      endereco: 'Acesso Araponga Martelo',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      agencia: '048-0',
+      conta: '37.586-9',
+      data_cadastro: '13/02/2021',
+      categoria: mockDataCategory,
+      status: true,
+    };
   });
 
   it('should be defined', () => {
@@ -71,7 +88,7 @@ describe('EstablishmentRepository', () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.save = jest.fn().mockReturnValue(mockData);
 
-      await repository.createEstablishments(mockData, mockDataCategory);
+      await repository.createEstablishments(mockDataParams, mockDataCategory);
       expect(repository.save).toBeCalledWith(mockData);
     });
 
@@ -88,14 +105,14 @@ describe('EstablishmentRepository', () => {
         .fn()
         .mockRejectedValue(new InternalServerErrorException());
       await expect(
-        repository.createEstablishments(mockData, mockDataCategory)
+        repository.createEstablishments(mockDataParams, mockDataCategory)
       ).rejects.toThrow(new InternalServerErrorException());
     });
 
     it('should be return created data', async () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       expect(
-        await repository.createEstablishments(mockData, mockDataCategory)
+        await repository.createEstablishments(mockDataParams, mockDataCategory)
       ).toEqual(mockData);
     });
   });
@@ -114,7 +131,7 @@ describe('EstablishmentRepository', () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
 
-      await repository.updateEstablishments(mockId, mockData, mockId);
+      await repository.updateEstablishments(mockId, mockDataParams, mockId);
       expect(repository.findOne).toBeCalledWith(mockId);
     });
 
@@ -130,7 +147,7 @@ describe('EstablishmentRepository', () => {
       repository.findOne = jest.fn().mockReturnValue(undefined);
 
       await expect(
-        repository.updateEstablishments(mockId, mockData, mockId)
+        repository.updateEstablishments(mockId, mockDataParams, mockId)
       ).rejects.toThrow(
         new NotFoundException(`The establishment was not found.`)
       );
@@ -139,7 +156,7 @@ describe('EstablishmentRepository', () => {
     it('should be called findOne twice', async () => {
       categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
-      await repository.updateEstablishments(mockId, mockData, mockId);
+      await repository.updateEstablishments(mockId, mockDataParams, mockId);
       expect(repository.findOne).toBeCalledTimes(2);
     });
 
@@ -150,7 +167,7 @@ describe('EstablishmentRepository', () => {
 
       const result = await repository.updateEstablishments(
         mockId,
-        mockData,
+        mockDataParams,
         mockId
       );
 

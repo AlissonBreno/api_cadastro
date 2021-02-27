@@ -22,6 +22,11 @@ export class EstablishmentController {
     return await this.establishmentService.getEstablishments();
   }
 
+  @Get(':id')
+  async getEstablishment(@Param('id') id: number) {
+    return await this.establishmentService.getEstablishment(id);
+  }
+
   @Post()
   @UsePipes(ValidationPipe)
   async createEstablishments(

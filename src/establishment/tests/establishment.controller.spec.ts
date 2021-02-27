@@ -15,6 +15,7 @@ describe('EstablishmentController', () => {
   beforeEach(async () => {
     const mockService = {
       getEstablishments: jest.fn(),
+      getEstablishment: jest.fn(),
       createEstablishments: jest.fn(),
       updateEstablishments: jest.fn(),
       deleteEstablishments: jest.fn(),
@@ -66,6 +67,27 @@ describe('EstablishmentController', () => {
     it('should be return when service returns', async () => {
       (service.getEstablishments as jest.Mock).mockReturnValue([mockData]);
       expect(await controller.getEstablishments()).toEqual([mockData]);
+    });
+  });
+
+  describe('getEstablishment()', () => {
+    it('should be throw when service throw', async () => {
+      (service.getEstablishment as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(controller.getEstablishment(null)).rejects.toThrow(
+        new BadRequestException()
+      );
+    });
+
+    it('should be return with correct params', async () => {
+      await controller.getEstablishment(mockId);
+      expect(service.getEstablishment).toBeCalledWith(mockId);
+    });
+
+    it('should be return when service returns', async () => {
+      (service.getEstablishment as jest.Mock).mockReturnValue(mockData);
+      expect(await controller.getEstablishment(mockId)).toEqual(mockData);
     });
   });
 

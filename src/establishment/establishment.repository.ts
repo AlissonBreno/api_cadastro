@@ -41,7 +41,13 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async getEstablishment(id: number): Promise<EstablishmentEntity> {
-    return new EstablishmentEntity();
+    const response = await this.findOne(id);
+
+    if (!response) {
+      throw new InternalServerErrorException();
+    }
+
+    return response;
   }
 
   async createEstablishments(

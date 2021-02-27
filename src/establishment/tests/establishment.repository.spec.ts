@@ -206,4 +206,26 @@ describe('EstablishmentRepository', () => {
       await expect(repository.deleteEstablishments(mockId)).rejects.toThrow();
     });
   });
+
+  describe('getEstablishment()', () => {
+    it('should be called findOne with correct params', async () => {
+      repository.findOne = jest.fn().mockReturnValue({});
+
+      await repository.getEstablishment(mockId);
+      expect(repository.findOne).toBeCalledWith(mockId);
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(repository.getEstablishment(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be return when findOne return', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      expect(await repository.getEstablishment(mockId)).toEqual(mockData);
+    });
+  });
 });

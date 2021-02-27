@@ -11,5 +11,6 @@ export function br2dbDataFormat(date: string): Date {
 }
 
 export function db2brDataFormat(date: Date): string {
-  return '';
+  const parts = date.toString().match(/(\d+)/g);
+  return `${parts[2]}/${parseInt(parts[1])}/${parts[0]}`;
 }

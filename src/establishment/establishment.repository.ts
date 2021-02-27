@@ -13,6 +13,7 @@ import { addMaskAgencia } from '../shared/helpers/agencia.helper';
 import { removeMask } from '../shared/helpers/string.helper';
 import { addMaskConta } from '../shared/helpers/conta.helper';
 import { addMaskTelefone } from '../shared/helpers/telefone.helper';
+import { br2dbDataFormat } from '../shared/helpers/data.helper';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {
@@ -54,7 +55,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     createEstablishment.estado = params.estado;
     createEstablishment.agencia = removeMask(params.agencia);
     createEstablishment.conta = removeMask(params.conta);
-    createEstablishment.data_cadastro = params.data_cadastro;
+    createEstablishment.data_cadastro = br2dbDataFormat(params.data_cadastro);
     createEstablishment.categoria = category;
 
     createEstablishment.status = params.status;
@@ -93,7 +94,7 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     updateFormated.estado = params.estado;
     updateFormated.agencia = removeMask(params.agencia);
     updateFormated.conta = removeMask(params.conta);
-    updateFormated.data_cadastro = params.data_cadastro;
+    updateFormated.data_cadastro = br2dbDataFormat(params.data_cadastro);
     updateFormated.categoria = category;
     updateFormated.status = params.status;
 

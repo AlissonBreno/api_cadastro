@@ -24,5 +24,5 @@ export class EstablishmentsDto {
   @IsNotEmpty()
   status: boolean;
 
-  data_cadastro: Date;
+  data_cadastro: string;
 }

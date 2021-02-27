@@ -40,6 +40,10 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
     return result;
   }
 
+  async getEstablishment(id: number): Promise<EstablishmentEntity> {
+    return new EstablishmentEntity();
+  }
+
   async createEstablishments(
     params: EstablishmentsDto,
     category: CategoryEntity

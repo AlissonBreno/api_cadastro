@@ -18,6 +18,7 @@ describe('EstablishmentService', () => {
   beforeEach(async () => {
     const establishmentRepositoryMock = {
       getEstablishments: jest.fn(),
+      getEstablishment: jest.fn(),
       createEstablishments: jest.fn(),
       updateEstablishments: jest.fn(),
       deleteEstablishments: jest.fn(),
@@ -87,6 +88,31 @@ describe('EstablishmentService', () => {
     it('should be return when repository returns', async () => {
       (repository.getEstablishments as jest.Mock).mockReturnValue([{}]);
       expect(await service.getEstablishments()).toEqual([{}]);
+    });
+  });
+
+  describe('getEstablishment()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.getEstablishment as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException()
+      );
+      await expect(service.getEstablishment(mockId)).rejects.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be not throw if repository returns', async () => {
+      await expect(service.getEstablishment(mockId)).resolves.not.toThrow();
+    });
+
+    it('should be called repository with correct params', async () => {
+      await service.getEstablishment(mockId);
+      expect(repository.getEstablishment).toBeCalledWith(mockId);
+    });
+
+    it('should be return when repository return', async () => {
+      (repository.getEstablishment as jest.Mock).mockReturnValue(mockData);
+      expect(await service.getEstablishment(mockId)).toEqual(mockData);
     });
   });
 

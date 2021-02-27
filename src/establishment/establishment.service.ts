@@ -15,6 +15,10 @@ export class EstablishmentService {
     return await this.establishmentRepository.getEstablishments();
   }
 
+  async getEstablishment(id: number): Promise<EstablishmentEntity> {
+    return this.establishmentRepository.getEstablishment(id);
+  }
+
   async createEstablishments(
     params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {

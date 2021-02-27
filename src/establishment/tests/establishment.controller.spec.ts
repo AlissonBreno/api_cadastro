@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CategoryEntity } from 'src/category/entities/category.entity';
+import { CategoryEntity } from '../../category/entities/category.entity';
 import { CategoryRepository } from '../../category/category.repository';
 import { EstablishmentController } from '../establishment.controller';
 import { EstablishmentService } from '../establishment.service';

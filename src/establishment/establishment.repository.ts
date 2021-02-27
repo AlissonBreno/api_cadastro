@@ -9,10 +9,10 @@ import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
 import { CategoryEntity } from '../category/entities/category.entity';
 import { addMaskCnpj } from '../shared/helpers/cnpj.helper';
-import { addMaskAgencia } from 'src/shared/helpers/agencia.helper';
-import { removeMask } from 'src/shared/helpers/string.helper';
-import { addMaskConta } from 'src/shared/helpers/conta.helper';
-import { addMaskTelefone } from 'src/shared/helpers/telefone.helper';
+import { addMaskAgencia } from '../shared/helpers/agencia.helper';
+import { removeMask } from '../shared/helpers/string.helper';
+import { addMaskConta } from '../shared/helpers/conta.helper';
+import { addMaskTelefone } from '../shared/helpers/telefone.helper';
 
 @EntityRepository(EstablishmentEntity)
 export class EstablishmentRepository extends Repository<EstablishmentEntity> {

@@ -41,7 +41,13 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
   }
 
   async getEstablishment(id: number): Promise<EstablishmentEntity> {
-    const response = await this.findOne(id);
+    const response = await this.findOne({
+      where: {
+        id_estabelecimento: id,
+      },
+      loadEagerRelations: true,
+      relations: ['categoria'],
+    });
 
     if (!response) {
       throw new InternalServerErrorException();

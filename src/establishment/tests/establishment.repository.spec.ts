@@ -11,6 +11,7 @@ import { EstablishmentRepository } from '../establishment.repository';
 describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let categoryRepository: CategoryRepository;
+  let mockDataRepositoryRequest;
   let mockDataCategory;
   let mockDataParams;
   let mockData;
@@ -31,6 +32,14 @@ describe('EstablishmentRepository', () => {
       categoria: 'supermercado',
       url_icon: 'icon.png',
     } as CategoryEntity;
+
+    mockDataRepositoryRequest = {
+      where: {
+        id_estabelecimento: mockId,
+      },
+      loadEagerRelations: true,
+      relations: ['categoria'],
+    };
 
     mockData = {
       razao_social: 'Tânia Informática ME',
@@ -212,7 +221,7 @@ describe('EstablishmentRepository', () => {
       repository.findOne = jest.fn().mockReturnValue({});
 
       await repository.getEstablishment(mockId);
-      expect(repository.findOne).toBeCalledWith(mockId);
+      expect(repository.findOne).toBeCalledWith(mockDataRepositoryRequest);
     });
 
     it('should be throw if findOne returns empty', async () => {

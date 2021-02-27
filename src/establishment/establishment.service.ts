@@ -3,7 +3,12 @@ import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
 import { EstablishmentsDto } from './dto/establishments-input.dto';
 import { CategoryService } from '../category/category.service';
-import { validateCnpj } from '../shared/helpers/cnpj.helper';
+import { addMaskCnpj, validateCnpj } from '../shared/helpers/cnpj.helper';
+import { addMaskTelefone } from '../shared/helpers/telefone.helper';
+import { addMaskAgencia } from '../shared/helpers/agencia.helper';
+import { addMaskConta } from '../shared/helpers/conta.helper';
+import { db2brDataFormat } from '../shared/helpers/data.helper';
+import { EstablishmentResponse } from './dto/establishments-response.dto';
 
 @Injectable()
 export class EstablishmentService {
@@ -15,8 +20,27 @@ export class EstablishmentService {
     return await this.establishmentRepository.getEstablishments();
   }
 
-  async getEstablishment(id: number): Promise<EstablishmentEntity> {
-    return this.establishmentRepository.getEstablishment(id);
+  async getEstablishment(id: number): Promise<EstablishmentResponse> {
+    const establishment = await this.establishmentRepository.getEstablishment(
+      id
+    );
+
+    return {
+      id_estabelecimento: establishment.id_estabelecimento,
+      razao_social: establishment.razao_social,
+      nome_fantasia: establishment.nome_fantasia,
+      cnpj: addMaskCnpj(establishment.cnpj),
+      email: establishment.email,
+      telefone: addMaskTelefone(establishment.telefone),
+      endereco: establishment.endereco,
+      cidade: establishment.cidade,
+      estado: establishment.estado,
+      agencia: addMaskAgencia(establishment.agencia),
+      conta: addMaskConta(establishment.conta),
+      categoria: establishment.categoria.id_categoria,
+      status: establishment.status,
+      data_cadastro: db2brDataFormat(establishment.data_cadastro),
+    };
   }
 
   async createEstablishments(

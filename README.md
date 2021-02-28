@@ -3,7 +3,7 @@ API para cadastro de estabelecimentos desenvolvida utilizando a técnica de TDD 
 
 ## Running the app
 
-##Docker:
+**Docker:**
 
 ```bash
 $ docker-compose up -d
@@ -12,7 +12,7 @@ $ docker-compose up -d
 Rode o arquivo `Scrip.sql` para cadastrar as categorias na ordem necessária para validações internas.
 
 
-##Start Aplication:
+**Start Application:**
 
 ```bash
 $ yarn start:dev

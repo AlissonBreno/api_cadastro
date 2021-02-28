@@ -12,6 +12,7 @@ describe('EstablishmentRepository', () => {
   let repository: EstablishmentRepository;
   let categoryRepository: CategoryRepository;
   let mockDataRepositoryRequest;
+  let mockDataChangeStatus;
   let mockDataCategory;
   let mockDataParams;
   let mockData;
@@ -56,6 +57,10 @@ describe('EstablishmentRepository', () => {
       categoria: mockDataCategory,
       status: true,
     } as EstablishmentEntity;
+
+    mockDataChangeStatus = {
+      status: true,
+    };
 
     mockDataParams = {
       razao_social: 'Tânia Informática ME',
@@ -137,47 +142,109 @@ describe('EstablishmentRepository', () => {
     });
 
     it('should be called findOne with correct params', async () => {
-      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
 
-      await repository.updateEstablishments(mockId, mockDataParams, mockId);
+      await repository.updateEstablishments(
+        mockId,
+        mockDataParams,
+        mockDataCategory
+      );
       expect(repository.findOne).toBeCalledWith(mockId);
     });
 
     it('should be throw if called with invalid params', async () => {
       mockData.razao_social = null;
       await expect(
-        repository.updateEstablishments(mockId, mockData, mockId)
+        repository.updateEstablishments(mockId, mockData, mockDataCategory)
       ).rejects.toThrow();
     });
 
     it('should be throw if findOne returns empty', async () => {
-      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(undefined);
 
       await expect(
-        repository.updateEstablishments(mockId, mockDataParams, mockId)
+        repository.updateEstablishments(
+          mockId,
+          mockDataParams,
+          mockDataCategory
+        )
       ).rejects.toThrow(
         new NotFoundException(`The establishment was not found.`)
       );
     });
 
     it('should be called findOne twice', async () => {
-      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
-      await repository.updateEstablishments(mockId, mockDataParams, mockId);
+      await repository.updateEstablishments(
+        mockId,
+        mockDataParams,
+        mockDataCategory
+      );
       expect(repository.findOne).toBeCalledTimes(2);
     });
 
     it('should be return updated data', async () => {
-      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
       repository.findOne = jest.fn().mockReturnValue(mockData);
       repository.update = jest.fn().mockReturnValue({});
 
       const result = await repository.updateEstablishments(
         mockId,
         mockDataParams,
-        mockId
+        mockDataCategory
+      );
+
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  describe('changeStatusEstablishment()', () => {
+    it('should be throw when update throw', async () => {
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new InternalServerErrorException());
+      await expect(
+        repository.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).rejects.toThrow();
+    });
+
+    it('should be called findOne with correct params', async () => {
+      categoryRepository.findOne = jest.fn().mockReturnValue(mockDataCategory);
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+
+      await repository.changeStatusEstablishment(mockId, mockDataChangeStatus);
+      expect(repository.findOne).toBeCalledWith(mockId);
+    });
+
+    it('should be throw if called with invalid params', async () => {
+      mockDataCategory.status = null;
+      await expect(
+        repository.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).rejects.toThrow();
+    });
+
+    it('should be throw if findOne returns empty', async () => {
+      repository.findOne = jest.fn().mockReturnValue(undefined);
+
+      await expect(
+        repository.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).rejects.toThrow(
+        new NotFoundException(`The establishment was not found.`)
+      );
+    });
+
+    it('should be called findOne twice', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      await repository.changeStatusEstablishment(mockId, mockDataChangeStatus);
+      expect(repository.findOne).toBeCalledTimes(2);
+    });
+
+    it('should be return updated data', async () => {
+      repository.findOne = jest.fn().mockReturnValue(mockData);
+      repository.update = jest.fn().mockReturnValue({});
+
+      const result = await repository.changeStatusEstablishment(
+        mockId,
+        mockDataChangeStatus
       );
 
       expect(result).toEqual(mockData);

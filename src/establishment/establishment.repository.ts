@@ -5,7 +5,10 @@ import {
 import { validateOrReject } from 'class-validator';
 import { EntityRepository, Repository } from 'typeorm';
 import { EstablishmentEntity } from './entities/establishment.entity';
-import { EstablishmentsDto } from './dto/establishments-input.dto';
+import {
+  ChangeStatusEstablihsmentDto,
+  EstablishmentsDto,
+} from './dto/establishments-input.dto';
 import { CategoryRepository } from '../category/category.repository';
 import { CategoryEntity } from '../category/entities/category.entity';
 import { addMaskCnpj } from '../shared/helpers/cnpj.helper';
@@ -128,6 +131,35 @@ export class EstablishmentRepository extends Repository<EstablishmentEntity> {
 
     response.cnpj = addMaskCnpj(response.cnpj);
     response.telefone = addMaskTelefone(params.telefone);
+    response.agencia = addMaskAgencia(response.agencia);
+    response.conta = addMaskConta(response.conta);
+
+    return response;
+  }
+
+  async changeStatusEstablishment(
+    id: number,
+    params: ChangeStatusEstablihsmentDto
+  ): Promise<EstablishmentEntity> {
+    const establishment = await this.findOne(id);
+
+    const updateFormated = new EstablishmentEntity();
+    updateFormated.status = params.status;
+
+    if (!establishment) {
+      throw new NotFoundException(`The establishment was not found.`);
+    }
+
+    await this.update({ id_estabelecimento: id }, updateFormated);
+
+    const response = await this.findOne({
+      where: { id_estabelecimento: id },
+      loadEagerRelations: true,
+      relations: ['categoria'],
+    });
+
+    response.cnpj = addMaskCnpj(response.cnpj);
+    response.telefone = addMaskTelefone(response.telefone);
     response.agencia = addMaskAgencia(response.agencia);
     response.conta = addMaskConta(response.conta);
 

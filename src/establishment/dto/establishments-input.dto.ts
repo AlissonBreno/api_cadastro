@@ -26,3 +26,8 @@ export class EstablishmentsDto {
 
   data_cadastro: string;
 }
+
+export class ChangeStatusEstablihsmentDto {
+  @IsNotEmpty()
+  status: boolean;
+}

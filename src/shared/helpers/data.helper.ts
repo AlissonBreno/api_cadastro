@@ -1,4 +1,7 @@
 export function br2dbDataFormat(date: string): Date {
+  if (date == '') {
+    return new Date();
+  }
   const splitedDate = date.split('/');
   date = `${splitedDate[2]}/${splitedDate[1]}/${splitedDate[0]}`;
   const parts = date.match(/(\d+)/g);

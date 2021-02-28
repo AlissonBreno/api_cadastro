@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentService } from './establishment.service';
-import { EstablishmentsDto } from './dto/establishments-input.dto';
+import {
+  ChangeStatusEstablihsmentDto,
+  EstablishmentsDto,
+} from './dto/establishments-input.dto';
 
 @Controller('establishment')
 export class EstablishmentController {
@@ -42,6 +45,18 @@ export class EstablishmentController {
     @Body() params: EstablishmentsDto
   ): Promise<EstablishmentEntity> {
     return await this.establishmentService.updateEstablishments(id, params);
+  }
+
+  @Patch('/status/:id')
+  @UsePipes(ValidationPipe)
+  async changeStatusEstablishment(
+    @Param('id') id: number,
+    @Body() params: ChangeStatusEstablihsmentDto
+  ): Promise<EstablishmentEntity> {
+    return await this.establishmentService.changeStatusEstablishment(
+      id,
+      params
+    );
   }
 
   @Delete('/:id')

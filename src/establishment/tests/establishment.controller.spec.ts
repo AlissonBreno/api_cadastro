@@ -8,6 +8,7 @@ import { EstablishmentService } from '../establishment.service';
 describe('EstablishmentController', () => {
   let controller: EstablishmentController;
   let service: EstablishmentService;
+  let mockDataChangeStatus;
   let mockDataCategory;
   let mockData;
   let mockId;
@@ -18,6 +19,7 @@ describe('EstablishmentController', () => {
       getEstablishment: jest.fn(),
       createEstablishments: jest.fn(),
       updateEstablishments: jest.fn(),
+      changeStatusEstablishment: jest.fn(),
       deleteEstablishments: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
@@ -34,6 +36,11 @@ describe('EstablishmentController', () => {
       categoria: 'supermercado',
       url_icon: 'icon.png',
     } as CategoryEntity;
+
+    mockDataChangeStatus = {
+      status: true,
+    };
+
     mockData = {
       razao_social: 'Tânia Informática ME',
       nome_fantasia: 'Tânia Informática',
@@ -132,6 +139,34 @@ describe('EstablishmentController', () => {
       expect(await controller.updateEstablishments(mockId, mockData)).toEqual(
         mockData
       );
+    });
+  });
+
+  describe('changeStatusEstablishment()', () => {
+    it('should be throw when service throw', async () => {
+      (service.changeStatusEstablishment as jest.Mock).mockRejectedValue(
+        new BadRequestException()
+      );
+      await expect(
+        controller.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).rejects.toThrow(new BadRequestException());
+    });
+
+    it('should be return with correct params', async () => {
+      await controller.changeStatusEstablishment(mockId, mockDataChangeStatus);
+      expect(service.changeStatusEstablishment).toBeCalledWith(
+        mockId,
+        mockDataChangeStatus
+      );
+    });
+
+    it('should be return when service returns', async () => {
+      (service.changeStatusEstablishment as jest.Mock).mockReturnValue(
+        mockData
+      );
+      expect(
+        await controller.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).toEqual(mockData);
     });
   });
 

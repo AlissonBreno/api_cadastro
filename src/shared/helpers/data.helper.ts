@@ -15,5 +15,7 @@ export function br2dbDataFormat(date: string): Date {
 
 export function db2brDataFormat(date: Date): string {
   const parts = date.toString().match(/(\d+)/g);
-  return `${parts[2]}/${parseInt(parts[1])}/${parts[0]}`;
+  const month =
+    parseInt(parts[1]) >= 10 ? parseInt(parts[1]) : `0${parseInt(parts[1])}`;
+  return `${parts[2]}/${month}/${parts[0]}`;
 }

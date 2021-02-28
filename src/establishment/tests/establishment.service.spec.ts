@@ -15,6 +15,7 @@ describe('EstablishmentService', () => {
 
   let mockDataCategory;
   let mockDataResponse;
+  let mockDataChangeStatus;
   let mockData;
   let mockId: number;
 
@@ -24,6 +25,7 @@ describe('EstablishmentService', () => {
       getEstablishment: jest.fn(),
       createEstablishments: jest.fn(),
       updateEstablishments: jest.fn(),
+      changeStatusEstablishment: jest.fn(),
       deleteEstablishments: jest.fn(),
     };
 
@@ -67,6 +69,10 @@ describe('EstablishmentService', () => {
       status: true,
       data_cadastro: new Date('2021-02-13T03:00:00.000Z'),
     } as EstablishmentEntity;
+
+    mockDataChangeStatus = {
+      status: true,
+    };
 
     mockDataResponse = {
       id_estabelecimento: 1,
@@ -211,6 +217,39 @@ describe('EstablishmentService', () => {
     it('should be return when repository returns', async () => {
       (repository.updateEstablishments as jest.Mock).mockReturnValue({});
       expect(await service.updateEstablishments(mockId, mockData)).toEqual({});
+    });
+  });
+
+  describe('changeStatusEstablishment()', () => {
+    it('should be throw if repository throw', async () => {
+      (repository.changeStatusEstablishment as jest.Mock).mockRejectedValue(
+        new InternalServerErrorException()
+      );
+      mockDataChangeStatus.status = 'INVALID';
+      await expect(
+        service.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should be called repository with correct params', async () => {
+      await service.changeStatusEstablishment(mockId, mockDataChangeStatus);
+      expect(repository.changeStatusEstablishment).toBeCalledWith(
+        mockId,
+        mockDataChangeStatus
+      );
+    });
+
+    it('should be not throw if repository returns', async () => {
+      await expect(service.changeStatusEstablishment).not.toThrow(
+        new InternalServerErrorException()
+      );
+    });
+
+    it('should be return when repository returns', async () => {
+      (repository.changeStatusEstablishment as jest.Mock).mockReturnValue({});
+      expect(
+        await service.changeStatusEstablishment(mockId, mockDataChangeStatus)
+      ).toEqual({});
     });
   });
 

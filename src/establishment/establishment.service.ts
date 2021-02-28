@@ -1,7 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { EstablishmentEntity } from './entities/establishment.entity';
 import { EstablishmentRepository } from './establishment.repository';
-import { EstablishmentsDto } from './dto/establishments-input.dto';
+import {
+  ChangeStatusEstablihsmentDto,
+  EstablishmentsDto,
+} from './dto/establishments-input.dto';
 import { CategoryService } from '../category/category.service';
 import { addMaskCnpj, validateCnpj } from '../shared/helpers/cnpj.helper';
 import { addMaskTelefone } from '../shared/helpers/telefone.helper';
@@ -71,6 +74,16 @@ export class EstablishmentService {
       id,
       params,
       category
+    );
+  }
+
+  async changeStatusEstablishment(
+    id: number,
+    params: ChangeStatusEstablihsmentDto
+  ) {
+    return await this.establishmentRepository.changeStatusEstablishment(
+      id,
+      params
     );
   }
 
